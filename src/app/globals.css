@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CLINICFLOW DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* — Brand Colors — */
+  --color-primary: #0D9488;
+  --color-primary-hover: #0F766E;
+  --color-primary-light: #EAF8F5;
+  --color-primary-surface: #F0FDFA;
+
+  /* — Neutrals — */
+  --color-bg: #FFFFFF;
+  --color-bg-soft: #F7FAFA;
+  --color-bg-muted: #F1F5F9;
+  --color-text: #101828;
+  --color-text-body: #475467;
+  --color-text-muted: #667085;
+  --color-border: #E4E7EC;
+  --color-border-light: #F2F4F7;
+
+  /* — Semantic — */
+  --color-success: #16865C;
+  --color-success-light: #ECFDF3;
+  --color-warning: #B7791F;
+  --color-warning-light: #FFFBEB;
+  --color-error: #D92D20;
+  --color-error-light: #FEF3F2;
+
+  /* — Shadows — */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.06), 0 2px 4px -2px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 4px 8px -4px rgba(16, 24, 40, 0.03);
+  --shadow-xl: 0 20px 40px -8px rgba(16, 24, 40, 0.1), 0 8px 16px -4px rgba(16, 24, 40, 0.04);
+  --shadow-primary: 0 4px 14px -2px rgba(13, 148, 136, 0.25);
+
+  /* — Radius — */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* — Animation — */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-reveal: 600ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* — Layout — */
+  --container-max: 1280px;
+  --header-height: 64px;
+  --bottom-nav-height: 64px;
+
+  /* Legacy compat */
+  --background: #FFFFFF;
+  --foreground: #101828;
+  --card: #ffffff;
+  --card-foreground: #101828;
+  --border: #E4E7EC;
+  --primary: #0D9488;
+  --primary-hover: #0F766E;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #667085;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+body {
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Premium selection */
+::selection {
+  background: #CCFBF1;
+  color: #134E4A;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D0D5DD;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #98A2B3;
+}
+
+/* ============================================================
+   SCROLL-REVEAL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-reveal) var(--ease-out),
+              transform var(--duration-reveal) var(--ease-out);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger > .reveal:nth-child(2) { transition-delay: 60ms; }
+.reveal-stagger > .reveal:nth-child(3) { transition-delay: 120ms; }
+.reveal-stagger > .reveal:nth-child(4) { transition-delay: 180ms; }
+.reveal-stagger > .reveal:nth-child(5) { transition-delay: 240ms; }
+.reveal-stagger > .reveal:nth-child(6) { transition-delay: 300ms; }
+.reveal-stagger > .reveal:nth-child(7) { transition-delay: 360ms; }
+.reveal-stagger > .reveal:nth-child(8) { transition-delay: 420ms; }
+
+/* ============================================================
+   BUTTON MICRO-INTERACTIONS
+   ============================================================ */
+.btn-press {
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   CARD HOVER
+   ============================================================ */
+.card-hover {
+  transition: box-shadow var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+}
+.card-hover:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: #D0D5DD;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   STICKY HEADER TRANSITION
+   ============================================================ */
+.header-scrolled {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   BOTTOM NAVIGATION (mobile)
+   ============================================================ */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn-press:active {
+    transform: none;
+  }
+  .card-hover:hover {
+    transform: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* ============================================================
+   UTILITY: Hide scrollbar but allow scroll
+   ============================================================ */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   SKELETON LOADING ANIMATION
+   ============================================================ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #F2F4F7 25%, #E4E7EC 50%, #F2F4F7 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
