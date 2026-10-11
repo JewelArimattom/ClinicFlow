@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { CancelBookingButton } from "./CancelButton";
 import { PrintButton } from "./PrintButton";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 
 export default async function BookingConfirmationPage({
   params,
@@ -37,28 +38,29 @@ export default async function BookingConfirmationPage({
   const isCancelled = appointment.status === "CANCELLED";
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-brand-teal selection:text-white">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522]">
+        <PublicNavbar />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-12">
-        {/* Breadcrumb / Back link */}
-        <div className="mb-6 flex items-center justify-between no-print">
-          <Link
-            href={`/clinics/${appointment.clinic?.slug || ""}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Clinic Profile
-          </Link>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-              <ShieldCheck className="w-3.5 h-3.5" /> Verified Pass
-            </span>
+        <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          {/* Breadcrumb / Back link */}
+          <div data-animate="fade-down" className="mb-6 flex items-center justify-between no-print">
+            <Link
+              href={`/clinics/${appointment.clinic?.slug || ""}`}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5F6D68] hover:text-[#07877F] transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Back to Clinic Profile
+            </Link>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#087443] bg-[#EDF7F2] px-2.5 py-1 rounded-full border border-[#087443]/20">
+                <ShieldCheck className="w-3.5 h-3.5" /> Verified Pass
+              </span>
+            </div>
           </div>
-        </div>
 
-        {/* Digital Ticket / Pass Container */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-900/5 overflow-hidden transition-all duration-300">
+          {/* Digital Ticket / Pass Container */}
+          <div data-animate="fade-up" className="bg-white rounded-3xl border border-[#C8D2CE] shadow-sm overflow-hidden transition-all duration-300">
           
           {/* Header Banner */}
           <div className={`p-8 sm:p-10 text-center relative overflow-hidden ${
@@ -257,5 +259,6 @@ export default async function BookingConfirmationPage({
 
       <PublicFooter />
     </div>
+  </AnimatedPage>
   );
 }

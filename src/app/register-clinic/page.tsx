@@ -1,40 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { PublicNavbar } from "@/components/public/Navbar";
 import { PublicFooter } from "@/components/public/Footer";
-import { 
-  Building2, 
-  User, 
-  Clock, 
-  CheckCircle2, 
-  ArrowRight, 
-  ArrowLeft, 
-  Loader2, 
-  ShieldCheck, 
-  Sparkles,
+import {
+  User,
+  Building2,
+  Clock,
+  ArrowRight,
+  ArrowLeft,
+  Loader2,
+  ShieldCheck,
   AlertCircle,
   Mail,
   Phone,
   Lock,
   MapPin,
   IndianRupee,
-  Layers,
-  HeartPulse
+  CheckCircle2,
+  Sparkles,
+  HelpCircle,
 } from "lucide-react";
+import { FormInput } from "@/components/ui/FormInput";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import { FormSelect } from "@/components/ui/FormSelect";
+import { StepIndicator } from "@/components/ui/StepIndicator";
+import { FormSection } from "@/components/ui/FormSection";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 
 export default function RegisterClinicPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
 
-  // Form Fields
+  // Form Fields — Step 1: Owner Details
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
+  // Form Fields — Step 2: Clinic Profile
   const [clinicName, setClinicName] = useState("");
   const [clinicType, setClinicType] = useState("Polyclinic & Family Practice");
   const [city, setCity] = useState("Kochi");
@@ -42,32 +48,113 @@ export default function RegisterClinicPage() {
   const [address, setAddress] = useState("");
   const [pinCode, setPinCode] = useState("");
 
-  const [consultationFee, setConsultationFee] = useState(400);
-  const [slotDurationMinutes, setSlotDurationMinutes] = useState(15);
+  // Form Fields — Step 3: Operations
+  const [consultationFee, setConsultationFee] = useState<number | string>(400);
+  const [slotDurationMinutes, setSlotDurationMinutes] = useState<number>(15);
 
+  // Validation errors per step
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [serverError, setServerError] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const stepsList = [
+    { id: 1, label: "Owner Details", description: "Admin account" },
+    { id: 2, label: "Clinic Profile", description: "Practice & location" },
+    { id: 3, label: "Operations", description: "Consultation & fees" },
+  ];
+
+  // Client-side step validation
+  const validateStep = (currentStep: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (currentStep === 1) {
+      if (!ownerName.trim()) {
+        newErrors.ownerName = "Full name is required";
+      }
+      if (!email.trim()) {
+        newErrors.email = "Work email is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        newErrors.email = "Please enter a valid email address";
+      }
+      if (!phone.trim()) {
+        newErrors.phone = "Mobile number is required";
+      } else if (phone.replace(/\D/g, "").length < 10) {
+        newErrors.phone = "Enter a valid 10-digit mobile number";
+      }
+      if (!password) {
+        newErrors.password = "Password is required";
+      } else if (password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters long";
+      }
+    } else if (currentStep === 2) {
+      if (!clinicName.trim()) {
+        newErrors.clinicName = "Clinic name is required";
+      }
+      if (!city.trim()) {
+        newErrors.city = "City is required";
+      }
+      if (!state.trim()) {
+        newErrors.state = "State is required";
+      }
+      if (!address.trim()) {
+        newErrors.address = "Street address is required";
+      }
+      if (!pinCode.trim()) {
+        newErrors.pinCode = "PIN code is required";
+      } else if (!/^\d{6}$/.test(pinCode.trim())) {
+        newErrors.pinCode = "Enter a valid 6-digit postal PIN code";
+      }
+    } else if (currentStep === 3) {
+      if (consultationFee === "" || Number(consultationFee) < 0) {
+        newErrors.consultationFee = "Please specify a valid consultation fee";
+      }
+      if (!slotDurationMinutes || slotDurationMinutes <= 0) {
+        newErrors.slotDurationMinutes = "Please choose a valid slot duration";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError("");
+    if (validateStep(step)) {
+      setStep((prev) => Math.min(prev + 1, 3));
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
+  };
+
+  const handlePrevStep = () => {
+    setServerError("");
+    setErrors({});
+    setStep((prev) => Math.max(prev - 1, 1));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateStep(3)) return;
+
     try {
       setIsLoading(true);
-      setError("");
+      setServerError("");
 
       const res = await fetch("/api/auth/register-clinic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ownerName,
-          email,
-          phone,
+          ownerName: ownerName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
           password,
-          clinicName,
+          clinicName: clinicName.trim(),
           clinicType,
-          city,
-          state,
-          address,
-          pinCode,
+          city: city.trim(),
+          state: state.trim(),
+          address: address.trim(),
+          pinCode: pinCode.trim(),
           consultationFee: Number(consultationFee),
           slotDurationMinutes: Number(slotDurationMinutes),
         }),
@@ -75,369 +162,424 @@ export default function RegisterClinicPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Failed to register clinic");
+        throw new Error(data.error || "Failed to register clinic. Please check your information.");
       }
 
-      router.push(data.redirectUrl || "/app/dashboard");
-      router.refresh();
+      setRegistrationSuccess(true);
+      setTimeout(() => {
+        router.push(data.redirectUrl || "/app/dashboard");
+        router.refresh();
+      }, 1200);
     } catch (err: any) {
-      setError(err.message);
+      setServerError(err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522]">
+        <PublicNavbar />
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-12">
-        <div className="bg-white rounded-xl border border-[#E5E5DF] shadow-[0_1px_3px_rgba(24,37,34,0.03)] overflow-hidden transition-colors">
-          
-          {/* Header */}
-          <div className="p-7 sm:p-8 bg-[#182522] text-white border-b border-[#2C3D39]">
-            <div className="space-y-2.5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#087F78]/20 text-[#52B1A2] text-[11px] font-semibold uppercase tracking-wider border border-[#087F78]/40">
-                <span>14-Day Free Trial</span>
-              </div>
-              
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Register Your Clinic
-              </h1>
-              <p className="text-xs text-[#E9F1EB]/75 max-w-md leading-relaxed">
-                Set up your public booking profile, live queue engine, and billing ledger in under 3 minutes.
-              </p>
-
-              {/* Stepper Progress */}
-              <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-[#2C3D39] text-xs font-semibold">
-                <div className={`flex items-center gap-2 ${step >= 1 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
-                    step >= 1 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
-                  }`}>
-                    {step > 1 ? "✓" : "1"}
-                  </span>
-                  <span>Owner</span>
-                </div>
-
-                <div className={`flex items-center gap-2 ${step >= 2 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
-                    step >= 2 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
-                  }`}>
-                    {step > 2 ? "✓" : "2"}
-                  </span>
-                  <span>Profile</span>
-                </div>
-
-                <div className={`flex items-center gap-2 ${step >= 3 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
-                    step >= 3 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
-                  }`}>
-                    3
-                  </span>
-                  <span>Operations</span>
-                </div>
-              </div>
+        <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          {/* Header Banner */}
+          <div data-animate="fade-down" className="text-center max-w-xl mx-auto space-y-2.5 mb-8 sm:mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4F0] text-[#07877F] text-xs font-bold border border-[#C8D2CE]/60">
+              <Sparkles className="w-3.5 h-3.5 text-[#07877F]" />
+              <span>Practice Onboarding</span>
             </div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#182522] tracking-tight">
+              Bring your clinic to ClinicFlow.
+            </h1>
+            <p className="text-sm text-[#5F6D68] leading-relaxed">
+              Set up your clinic profile and appointment preferences in a few simple steps.
+            </p>
           </div>
 
-          {error && (
-            <div className="m-6 sm:m-8 p-4 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-700 text-xs flex items-center gap-2.5 animate-fadeIn">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span className="font-semibold">{error}</span>
-            </div>
-          )}
-
-          <form 
-            onSubmit={step === 3 ? handleSubmit : (e) => { e.preventDefault(); setStep(step + 1); }} 
-            className="p-6 sm:p-10 space-y-6"
+          {/* Stepper Card */}
+          <div
+            data-animate="fade-up"
+            className="bg-white rounded-2xl border border-[#C8D2CE] p-5 sm:p-7 shadow-sm mb-6"
           >
-            {/* Step 1: Owner Details */}
-            {step === 1 && (
-              <div className="space-y-4 animate-fadeIn">
-                <div className="border-b border-slate-100 pb-3">
-                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <User className="w-4 h-4 text-teal-600" />
-                    Doctor or Clinic Administrator Details
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">This person will hold primary owner permissions for the clinic account.</p>
-                </div>
+            <StepIndicator
+              steps={stepsList}
+              currentStep={step}
+              onStepClick={(id) => {
+                if (id < step) {
+                  setStep(id);
+                  setErrors({});
+                }
+              }}
+            />
+          </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Your Full Name *
-                  </label>
-                  <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Dr. Rajesh Menon"
-                      value={ownerName}
-                      onChange={(e) => setOwnerName(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
-                </div>
+          {/* Form Container */}
+          <div
+            data-animate="fade-up"
+            className="bg-white rounded-2xl border border-[#C8D2CE] shadow-[0_2px_8px_rgba(24,37,34,0.04)] overflow-hidden transition-all duration-200"
+          >
+            {/* Server Error Alert */}
+            {serverError && (
+              <div
+                role="alert"
+                className="m-6 sm:m-8 p-4 rounded-xl bg-[#FDF2F2] border border-[#B42318]/30 text-[#B42318] text-xs font-semibold flex items-start gap-3 animate-fadeIn"
+              >
+                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <div className="leading-relaxed">{serverError}</div>
+              </div>
+            )}
 
+            {/* Success Notification Alert */}
+            {registrationSuccess && (
+              <div
+                role="status"
+                className="m-6 sm:m-8 p-4 rounded-xl bg-[#EDF7F2] border border-[#087443]/30 text-[#087443] text-xs font-semibold flex items-center gap-3 animate-fadeIn"
+              >
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Work Email *
-                  </label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      required
-                      placeholder="doctor@clinic.in"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Mobile Phone *
-                  </label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="tel"
-                      required
-                      placeholder="9895012345"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Account Password *
-                  </label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="password"
-                      required
-                      minLength={6}
-                      placeholder="At least 6 characters"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
+                  Registration successful! Preparing your clinic dashboard workspace...
                 </div>
               </div>
             )}
 
-            {/* Step 2: Clinic Information */}
-            {step === 2 && (
-              <div className="space-y-4 animate-fadeIn">
-                <div className="border-b border-slate-100 pb-3">
-                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-teal-600" />
-                    Clinic Location & Practice Details
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">This information will be displayed on your public booking profile.</p>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Clinic Name *
-                  </label>
-                  <div className="relative">
-                    <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Aura Health Polyclinic"
-                      value={clinicName}
-                      onChange={(e) => setClinicName(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Clinic Practice Type
-                  </label>
-                  <select
-                    value={clinicType}
-                    onChange={(e) => setClinicType(e.target.value)}
-                    className="w-full px-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 bg-white"
+            <form
+              onSubmit={step === 3 ? handleSubmit : handleNextStep}
+              noValidate
+              className="p-6 sm:p-9 space-y-6"
+            >
+              {/* STEP 1: Owner Details */}
+              {step === 1 && (
+                <div className="space-y-5 animate-fadeIn">
+                  <FormSection
+                    title="Who will manage this clinic?"
+                    description="Create the primary administrator account for your clinic practice."
+                    icon={<User className="w-4 h-4" />}
                   >
-                    <option value="Polyclinic & Family Practice">Polyclinic & Family Practice</option>
-                    <option value="General Practice Clinic">General Practice Clinic</option>
-                    <option value="Specialty Medical Centre">Specialty Medical Centre</option>
-                    <option value="Dental Clinic">Dental Clinic</option>
-                    <option value="Pediatric Care Centre">Pediatric Care Centre</option>
-                  </select>
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <FormInput
+                          label="Full Name"
+                          id="ownerName"
+                          name="ownerName"
+                          required
+                          value={ownerName}
+                          onChange={(e) => {
+                            setOwnerName(e.target.value);
+                            if (errors.ownerName) setErrors((prev) => ({ ...prev, ownerName: "" }));
+                          }}
+                          placeholder="Dr. Rajesh Menon"
+                          error={errors.ownerName}
+                          helperText="This name will appear on the practice administrative dashboard."
+                          icon={<User className="w-4 h-4" strokeWidth={1.8} />}
+                        />
+                      </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      City *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Kochi"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full px-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      PIN Code *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      maxLength={6}
-                      placeholder="682031"
-                      value={pinCode}
-                      onChange={(e) => setPinCode(e.target.value)}
-                      className="w-full px-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Physical Street Address *
-                  </label>
-                  <div className="relative">
-                    <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="Street, Landmark, Locality"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Operational Settings */}
-            {step === 3 && (
-              <div className="space-y-4 animate-fadeIn">
-                <div className="border-b border-slate-100 pb-3">
-                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-teal-600" />
-                    Operational Settings & Consultation Fees
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Configure default consultation settings. You can fine-tune individual doctor timings later.</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Default Consultation Fee (₹)
-                    </label>
-                    <div className="relative">
-                      <IndianRupee className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="number"
+                      <FormInput
+                        label="Work Email"
+                        id="email"
+                        name="email"
+                        type="email"
                         required
+                        autoComplete="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                        }}
+                        placeholder="doctor@clinic.in"
+                        error={errors.email}
+                        helperText="Used for clinic authentication and ledger reports."
+                        icon={<Mail className="w-4 h-4" strokeWidth={1.8} />}
+                      />
+
+                      <FormInput
+                        label="Mobile Number"
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        value={phone}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
+                        }}
+                        placeholder="9895012345"
+                        error={errors.phone}
+                        helperText="For security verification & OTP notifications."
+                        icon={<Phone className="w-4 h-4" strokeWidth={1.8} />}
+                      />
+
+                      <div className="sm:col-span-2">
+                        <PasswordInput
+                          label="Account Password"
+                          id="password"
+                          name="password"
+                          required
+                          autoComplete="new-password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+                          }}
+                          placeholder="Create a secure password"
+                          error={errors.password}
+                          helperText="Must be at least 6 characters with a combination of letters and numbers."
+                        />
+                      </div>
+                    </div>
+                  </FormSection>
+                </div>
+              )}
+
+              {/* STEP 2: Clinic Profile */}
+              {step === 2 && (
+                <div className="space-y-6 animate-fadeIn">
+                  <FormSection
+                    title="Clinic Information"
+                    description="Tell us about your medical center or specialized practice."
+                    icon={<Building2 className="w-4 h-4" />}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <FormInput
+                          label="Clinic Name"
+                          id="clinicName"
+                          name="clinicName"
+                          required
+                          value={clinicName}
+                          onChange={(e) => {
+                            setClinicName(e.target.value);
+                            if (errors.clinicName) setErrors((prev) => ({ ...prev, clinicName: "" }));
+                          }}
+                          placeholder="e.g. Aura Health Polyclinic & Diagnostic Centre"
+                          error={errors.clinicName}
+                          helperText="Your official clinic title displayed on public booking pages."
+                          icon={<Building2 className="w-4 h-4" strokeWidth={1.8} />}
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <FormSelect
+                          label="Clinic Practice Type"
+                          id="clinicType"
+                          name="clinicType"
+                          value={clinicType}
+                          onChange={(e) => setClinicType(e.target.value)}
+                          options={[
+                            { value: "Polyclinic & Family Practice", label: "Polyclinic & Family Practice" },
+                            { value: "General Practice Clinic", label: "General Practice Clinic" },
+                            { value: "Specialty Medical Centre", label: "Specialty Medical Centre" },
+                            { value: "Dental Clinic", label: "Dental Clinic" },
+                            { value: "Pediatric Care Centre", label: "Pediatric Care Centre" },
+                            { value: "Cardiology & Heart Care", label: "Cardiology & Heart Care" },
+                            { value: "Orthopedic & Sports Medicine", label: "Orthopedic & Sports Medicine" },
+                            { value: "Dermatology & Cosmetology", label: "Dermatology & Cosmetology" },
+                          ]}
+                        />
+                      </div>
+                    </div>
+                  </FormSection>
+
+                  <FormSection
+                    title="Location Details"
+                    description="Physical clinic address where patients will attend appointments."
+                    icon={<MapPin className="w-4 h-4" />}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <FormInput
+                          label="Physical Street Address"
+                          id="address"
+                          name="address"
+                          required
+                          value={address}
+                          onChange={(e) => {
+                            setAddress(e.target.value);
+                            if (errors.address) setErrors((prev) => ({ ...prev, address: "" }));
+                          }}
+                          placeholder="Building, Landmark, Street Name"
+                          error={errors.address}
+                          icon={<MapPin className="w-4 h-4" strokeWidth={1.8} />}
+                        />
+                      </div>
+
+                      <FormInput
+                        label="City"
+                        id="city"
+                        name="city"
+                        required
+                        value={city}
+                        onChange={(e) => {
+                          setCity(e.target.value);
+                          if (errors.city) setErrors((prev) => ({ ...prev, city: "" }));
+                        }}
+                        placeholder="Kochi"
+                        error={errors.city}
+                      />
+
+                      <FormInput
+                        label="State / Province"
+                        id="state"
+                        name="state"
+                        required
+                        value={state}
+                        onChange={(e) => {
+                          setState(e.target.value);
+                          if (errors.state) setErrors((prev) => ({ ...prev, state: "" }));
+                        }}
+                        placeholder="Kerala"
+                        error={errors.state}
+                      />
+
+                      <div className="sm:col-span-2">
+                        <FormInput
+                          label="Postal PIN Code"
+                          id="pinCode"
+                          name="pinCode"
+                          required
+                          maxLength={6}
+                          value={pinCode}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, "");
+                            setPinCode(val);
+                            if (errors.pinCode) setErrors((prev) => ({ ...prev, pinCode: "" }));
+                          }}
+                          placeholder="682031"
+                          error={errors.pinCode}
+                          helperText="6-digit Indian Postal Code for accurate geo-location matching."
+                        />
+                      </div>
+                    </div>
+                  </FormSection>
+                </div>
+              )}
+
+              {/* STEP 3: Operational Settings */}
+              {step === 3 && (
+                <div className="space-y-6 animate-fadeIn">
+                  <FormSection
+                    title="Set up your clinic operations."
+                    description="Configure baseline consultation parameters. Individual doctor slots and timings can be configured anytime later."
+                    icon={<Clock className="w-4 h-4" />}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormInput
+                        label="Default Consultation Fee (₹)"
+                        id="consultationFee"
+                        name="consultationFee"
+                        type="number"
                         min={0}
+                        required
                         value={consultationFee}
-                        onChange={(e) => setConsultationFee(Number(e.target.value))}
-                        className="w-full pl-10 pr-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600"
+                        onChange={(e) => {
+                          setConsultationFee(e.target.value);
+                          if (errors.consultationFee)
+                            setErrors((prev) => ({ ...prev, consultationFee: "" }));
+                        }}
+                        placeholder="400"
+                        error={errors.consultationFee}
+                        helperText="Base doctor fee shown on your public booking profile."
+                        icon={<IndianRupee className="w-4 h-4" strokeWidth={1.8} />}
+                      />
+
+                      <FormSelect
+                        label="Default Slot Duration"
+                        id="slotDurationMinutes"
+                        name="slotDurationMinutes"
+                        value={slotDurationMinutes}
+                        onChange={(e) => setSlotDurationMinutes(Number(e.target.value))}
+                        helperText="Standard consultation window for booking slots."
+                        options={[
+                          { value: 10, label: "10 minutes (Express follow-up)" },
+                          { value: 15, label: "15 minutes (Standard OPD)" },
+                          { value: 20, label: "20 minutes (Comprehensive)" },
+                          { value: 30, label: "30 minutes (Specialized consultation)" },
+                          { value: 45, label: "45 minutes (Dental / Minor procedure)" },
+                        ]}
                       />
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Slot Duration (Minutes)
-                    </label>
-                    <select
-                      value={slotDurationMinutes}
-                      onChange={(e) => setSlotDurationMinutes(Number(e.target.value))}
-                      className="w-full px-3.5 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 bg-white"
-                    >
-                      <option value={10}>10 minutes</option>
-                      <option value={15}>15 minutes (Standard)</option>
-                      <option value={20}>20 minutes</option>
-                      <option value={30}>30 minutes</option>
-                    </select>
-                  </div>
+                    {/* Instant Setup Information Box */}
+                    <div className="mt-4 p-4 sm:p-5 rounded-xl bg-[#EAF4F0] border border-[#C8D2CE] text-[#142923] text-xs leading-relaxed space-y-2">
+                      <div className="flex items-center gap-2 font-bold text-sm text-[#07877F]">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Instant Workspace & Public URL Generation</span>
+                      </div>
+                      <p className="text-[#5F6D68]">
+                        Upon completing registration, your clinic management workspace and dedicated public booking URL (
+                        <code className="bg-white px-2 py-0.5 rounded font-mono text-[#07877F] border border-[#C8D2CE]">
+                          /clinics/[your-clinic-slug]
+                        </code>
+                        ) will be activated immediately with real-time token calling and queue capabilities.
+                      </p>
+                    </div>
+                  </FormSection>
                 </div>
+              )}
 
-                <div className="p-5 rounded-2xl bg-teal-50 border border-teal-200/80 text-teal-900 text-xs leading-relaxed space-y-1.5">
-                  <div className="flex items-center gap-1.5 font-bold text-teal-950">
-                    <HeartPulse className="w-4 h-4 text-teal-600" />
-                    <span>Instant Workspace Activation</span>
-                  </div>
-                  <p className="text-teal-800">
-                    Upon completing registration, your clinic management workspace and public booking URL (<code className="bg-white/80 px-1.5 py-0.5 rounded font-mono text-teal-900 font-semibold">/clinics/[your-slug]</code>) will be created immediately.
-                  </p>
-                </div>
+              {/* Step Navigation Controls */}
+              <div className="pt-6 border-t border-[#E5E9E5] flex items-center justify-between gap-3">
+                {step > 1 ? (
+                  <button
+                    type="button"
+                    onClick={handlePrevStep}
+                    disabled={isLoading}
+                    className="h-11 sm:h-12 px-5 sm:px-6 rounded-[11px] border border-[#C8D2CE] bg-white text-xs sm:text-sm font-bold text-[#182522] hover:bg-[#FAF9F6] hover:border-[#849B93] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span>Back</span>
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="text-xs sm:text-sm text-[#5F6D68] hover:text-[#07877F] font-semibold transition-colors flex items-center gap-1"
+                  >
+                    <span>Already registered? Sign in</span>
+                  </Link>
+                )}
+
+                {step < 3 ? (
+                  <button
+                    type="submit"
+                    className="h-11 sm:h-12 px-7 sm:px-8 rounded-[11px] bg-[#07877F] hover:bg-[#066E68] text-white text-xs sm:text-sm font-bold shadow-sm shadow-[#07877F]/20 hover:shadow-md transition-all flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-3 focus-visible:ring-[#07877F]/30"
+                  >
+                    <span>Continue</span>
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={isLoading || registrationSuccess}
+                    className="h-11 sm:h-12 px-8 sm:px-9 rounded-[11px] bg-[#07877F] hover:bg-[#066E68] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#07877F]/25 hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-3 focus-visible:ring-[#07877F]/30"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Creating Clinic Workspace...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Complete Registration</span>
+                        <CheckCircle2 className="w-4 h-4 stroke-[2.2]" />
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
-            )}
+            </form>
+          </div>
 
-            {/* Step Navigation Buttons */}
-            <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
-              {step > 1 ? (
-                <button
-                  type="button"
-                  onClick={() => setStep(step - 1)}
-                  className="px-5 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  className="text-xs text-slate-500 hover:text-slate-800 font-semibold"
-                >
-                  Already have an account? Sign in &rarr;
-                </Link>
-              )}
+          {/* Bottom Security Note */}
+          <div className="mt-8 text-center text-xs text-[#5F6D68] flex items-center justify-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#07877F]" />
+            <span>256-bit encrypted SSL connection · HIPAA & ABDM Compliant Architecture</span>
+          </div>
+        </main>
 
-              {step < 3 ? (
-                <button
-                  type="submit"
-                  className="px-7 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-sm shadow-teal-600/20 hover:shadow-md transition flex items-center gap-2"
-                >
-                  <span>Continue</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="px-8 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md shadow-teal-600/25 transition flex items-center gap-2 disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Creating Workspace...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Complete Registration</span>
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
-      </main>
-
-      <PublicFooter />
-    </div>
+        <PublicFooter />
+      </div>
+    </AnimatedPage>
   );
 }

@@ -14,53 +14,59 @@ const config: Config = {
         // Primary deep teal identity
         brand: {
           50: "#F2F9F7",
-          100: "#E2F2EE",
-          200: "#C4E5DE",
-          300: "#92CEC3",
+          100: "#EAF4F0",
+          200: "#C8D2CE",
+          300: "#849B93",
           400: "#52B1A2",
-          500: "#14958C",
-          600: "#087F78", // Requested primary deep teal
-          700: "#066761",
+          500: "#07877F", // User-specified primary teal
+          600: "#07877F",
+          700: "#066E68", // User-specified primary hover
           800: "#05524E",
-          900: "#044340",
-          950: "#022725",
+          900: "#142923", // Deep forest
+          950: "#0D1D19",
+        },
+        forest: {
+          DEFAULT: "#142923",
+          light: "#1C3830",
+          dark: "#0D1D19",
         },
         // Editorial neutrals
         ink: {
-          DEFAULT: "#182522", // Requested deep ink dark text
+          DEFAULT: "#182522", // Main text
           light: "#2B3C38",
-          muted: "#66736F", // Requested muted slate
+          muted: "#5F6D68", // Secondary text
         },
         ivory: {
-          DEFAULT: "#FAF9F5", // Requested warm ivory background
+          DEFAULT: "#FAF9F6", // Main background
           soft: "#F5F3EC",
           dark: "#EFECE3",
         },
         sage: {
-          DEFAULT: "#E9F1EB", // Requested pale sage secondary surface
+          DEFAULT: "#EAF4F0", // Subtle accent background
           light: "#F3F7F4",
           dark: "#D6E5D9",
         },
         slate: {
-          muted: "#66736F", // Requested muted slate
+          muted: "#5F6D68", // Secondary text
         },
         surface: {
           DEFAULT: "#FFFFFF",
-          soft: "#FAF9F5",
-          sage: "#E9F1EB",
+          soft: "#FAF9F6",
+          sage: "#EAF4F0",
           card: "#FFFFFF",
         },
         border: {
-          DEFAULT: "#E5E5DF", // Requested subtle warm grey
-          subtle: "#ECECE6",
+          DEFAULT: "#C8D2CE", // Idle input border
+          subtle: "#E5E9E5", // Divider
+          hover: "#849B93",
         },
         semantic: {
-          success: "#15803D",
-          "success-light": "#F0FDF4",
+          success: "#087443",
+          "success-light": "#EDF7F2",
           warning: "#B45309",
           "warning-light": "#FFFBEB",
-          error: "#B91C1C",
-          "error-light": "#FEF2F2",
+          error: "#B42318",
+          "error-light": "#FDF2F2",
         },
       },
       fontFamily: {

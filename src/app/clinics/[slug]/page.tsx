@@ -5,6 +5,7 @@ import { PublicNavbar } from "@/components/public/Navbar";
 import { PublicFooter } from "@/components/public/Footer";
 import { SpecialtyIcon } from "@/components/ui/SpecialtyIcon";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 import { db } from "@/lib/db";
 import {
   MapPin,
@@ -37,8 +38,9 @@ export default async function PublicClinicProfilePage({ params }: { params: { sl
   const doctors = await db.getDoctors(clinic.id);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522]">
+        <PublicNavbar />
 
       {/* Cover image + clinic header */}
       <section className="relative">
@@ -255,5 +257,6 @@ export default async function PublicClinicProfilePage({ params }: { params: { sl
 
       <PublicFooter />
     </div>
+  </AnimatedPage>
   );
 }

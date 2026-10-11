@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={manrope.variable}>
-      <body className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522] antialiased font-sans">
+      <body className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522] antialiased font-sans">
         {children}
       </body>
     </html>

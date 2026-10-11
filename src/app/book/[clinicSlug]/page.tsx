@@ -19,6 +19,7 @@ import {
   Stethoscope,
   Mail,
 } from "lucide-react";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 
 interface Doctor {
   id: string;
@@ -164,61 +165,62 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522]">
+        <PublicNavbar />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Breadcrumb */}
-        <Link
-          href={`/clinics/${params.clinicSlug}`}
-          className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-brand-600 transition-colors mb-5 focus-ring rounded"
-        >
-          <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2} /> Back to {clinic?.name || "Clinic"}
-        </Link>
+        <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          {/* Breadcrumb */}
+          <Link
+            href={`/clinics/${params.clinicSlug}`}
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[#5F6D68] hover:text-[#07877F] transition-colors mb-5 focus-ring rounded"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2} /> Back to {clinic?.name || "Clinic"}
+          </Link>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-card overflow-hidden">
-          {/* Header */}
-          <div className="p-5 sm:p-6 bg-gray-950 text-white">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-brand-400 uppercase tracking-wider">
-                  Appointment Booking
-                </p>
-                <h1 className="text-xl sm:text-2xl font-bold text-white mt-1">
-                  {clinic?.name}
-                </h1>
-                <p className="text-xs text-gray-400 mt-1">
-                  {clinic?.address}, {clinic?.city}
-                </p>
+          <div data-animate="fade-up" className="bg-white rounded-2xl border border-[#C8D2CE] shadow-sm overflow-hidden">
+            {/* Header */}
+            <div className="p-5 sm:p-6 bg-[#142923] text-white">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold text-[#52B1A2] uppercase tracking-wider">
+                    Appointment Booking
+                  </p>
+                  <h1 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    {clinic?.name}
+                  </h1>
+                  <p className="text-xs text-[#849B93] mt-1">
+                    {clinic?.address}, {clinic?.city}
+                  </p>
+                </div>
+                {selectedDoctor && (
+                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-right">
+                    <span className="text-[11px] text-[#849B93] block">Consultation Fee</span>
+                    <span className="text-xl font-bold text-[#52B1A2]">₹{selectedDoctor.consultationFee}</span>
+                  </div>
+                )}
               </div>
-              {selectedDoctor && (
-                <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-right">
-                  <span className="text-[11px] text-gray-400 block">Fee</span>
-                  <span className="text-xl font-bold text-brand-400">₹{selectedDoctor.consultationFee}</span>
-                </div>
-              )}
+
+              {/* Step indicator */}
+              <div className="mt-5 flex items-center gap-1">
+                {["Doctor", "Date", "Slot", "Details"].map((label, i) => (
+                  <div key={label} className="flex-1">
+                    <div className={`h-1 rounded-full transition-colors ${i + 1 <= currentStep ? "bg-[#52B1A2]" : "bg-white/10"}`} />
+                    <span className={`text-[10px] mt-1 block font-semibold ${i + 1 <= currentStep ? "text-[#52B1A2]" : "text-white/30"}`}>
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Step indicator */}
-            <div className="mt-5 flex items-center gap-1">
-              {["Doctor", "Date", "Slot", "Details"].map((label, i) => (
-                <div key={label} className="flex-1">
-                  <div className={`h-1 rounded-full transition-colors ${i + 1 <= currentStep ? "bg-brand-400" : "bg-white/10"}`} />
-                  <span className={`text-[10px] mt-1 block ${i + 1 <= currentStep ? "text-brand-400" : "text-white/30"}`}>
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Error */}
-          {errorMessage && (
-            <div className="mx-5 mt-5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
-              <span>{errorMessage}</span>
-            </div>
-          )}
+            {/* Error */}
+            {errorMessage && (
+              <div className="mx-5 mt-5 p-3.5 rounded-xl bg-[#FDF2F2] border border-[#B42318]/30 text-[#B42318] text-xs font-semibold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
+                <span>{errorMessage}</span>
+              </div>
+            )}
 
           <form onSubmit={handleBookingSubmit} className="p-5 sm:p-6 space-y-7">
             {/* Step 1: Doctor */}
@@ -326,12 +328,12 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="patientName" className="block text-xs font-semibold text-gray-700 mb-1.5">
-                    Full Name <span className="text-red-500">*</span>
+                  <label htmlFor="patientName" className="block text-xs font-semibold text-[#182522] mb-1.5">
+                    Full Name <span className="text-[#07877F] font-bold">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <User className="w-4 h-4 text-gray-400" strokeWidth={1.75} />
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <User className="w-4 h-4 text-[#5F6D68]" strokeWidth={1.8} />
                     </div>
                     <input
                       id="patientName"
@@ -340,18 +342,18 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
                       value={patientName}
                       onChange={(e) => setPatientName(e.target.value)}
                       placeholder="e.g. Ramesh Nair"
-                      className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all duration-fast"
+                      className="w-full h-12 pl-11 pr-4 text-sm rounded-[11px] border border-[#C8D2CE] bg-white text-[#182522] placeholder:text-[#5F6D68]/60 hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-3 focus:ring-[#07877F]/15 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="patientPhone" className="block text-xs font-semibold text-gray-700 mb-1.5">
-                    Mobile Number <span className="text-red-500">*</span>
+                  <label htmlFor="patientPhone" className="block text-xs font-semibold text-[#182522] mb-1.5">
+                    Mobile Number <span className="text-[#07877F] font-bold">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Phone className="w-4 h-4 text-gray-400" strokeWidth={1.75} />
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Phone className="w-4 h-4 text-[#5F6D68]" strokeWidth={1.8} />
                     </div>
                     <input
                       id="patientPhone"
@@ -360,18 +362,18 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
                       value={patientPhone}
                       onChange={(e) => setPatientPhone(e.target.value)}
                       placeholder="e.g. 9845012345"
-                      className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all duration-fast"
+                      className="w-full h-12 pl-11 pr-4 text-sm rounded-[11px] border border-[#C8D2CE] bg-white text-[#182522] placeholder:text-[#5F6D68]/60 hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-3 focus:ring-[#07877F]/15 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="patientEmail" className="block text-xs font-semibold text-gray-700 mb-1.5">
-                    Email <span className="text-gray-400 font-normal">(Optional)</span>
+                  <label htmlFor="patientEmail" className="block text-xs font-semibold text-[#182522] mb-1.5">
+                    Email <span className="text-[#5F6D68] font-normal">(Optional)</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="w-4 h-4 text-gray-400" strokeWidth={1.75} />
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Mail className="w-4 h-4 text-[#5F6D68]" strokeWidth={1.8} />
                     </div>
                     <input
                       id="patientEmail"
@@ -379,14 +381,14 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
                       value={patientEmail}
                       onChange={(e) => setPatientEmail(e.target.value)}
                       placeholder="For booking confirmation"
-                      className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all duration-fast"
+                      className="w-full h-12 pl-11 pr-4 text-sm rounded-[11px] border border-[#C8D2CE] bg-white text-[#182522] placeholder:text-[#5F6D68]/60 hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-3 focus:ring-[#07877F]/15 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="reason" className="block text-xs font-semibold text-gray-700 mb-1.5">
-                    Reason for Visit <span className="text-gray-400 font-normal">(Optional)</span>
+                  <label htmlFor="reason" className="block text-xs font-semibold text-[#182522] mb-1.5">
+                    Reason for Visit <span className="text-[#5F6D68] font-normal">(Optional)</span>
                   </label>
                   <input
                     id="reason"
@@ -394,33 +396,33 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     placeholder="e.g. Fever, Blood pressure check"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all duration-fast"
+                    className="w-full h-12 px-4 text-sm rounded-[11px] border border-[#C8D2CE] bg-white text-[#182522] placeholder:text-[#5F6D68]/60 hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-3 focus:ring-[#07877F]/15 transition-colors"
                   />
                 </div>
               </div>
             </div>
 
             {/* Submit */}
-            <div className="pt-5 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-xs text-gray-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-brand-600 flex-shrink-0" strokeWidth={1.75} />
+            <div className="pt-5 border-t border-[#E5E9E5] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-xs text-[#5F6D68] flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-[#07877F] flex-shrink-0" strokeWidth={1.8} />
                 <span>Instant confirmation. Pay ₹{selectedDoctor?.consultationFee || 400} at the clinic.</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting || !selectedSlot || !patientName || !patientPhone}
-                className="w-full sm:w-auto px-8 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm shadow-primary transition-all duration-fast flex items-center justify-center gap-2 btn-press focus-ring"
+                className="w-full sm:w-auto h-12 px-8 rounded-[11px] bg-[#07877F] hover:bg-[#066E68] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Confirming...
+                    <span>Confirming...</span>
                   </>
                 ) : (
                   <>
-                    Confirm Appointment
-                    <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                    <span>Confirm Appointment</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                   </>
                 )}
               </button>
@@ -431,5 +433,6 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
 
       <PublicFooter />
     </div>
+  </AnimatedPage>
   );
 }

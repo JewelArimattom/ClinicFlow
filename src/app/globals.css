@@ -6,28 +6,37 @@
    CLINICFLOW DESIGN TOKENS
    ============================================================ */
 :root {
-  /* — Restrained Healthcare Identity Tokens — */
-  --color-primary: #087F78;
-  --color-primary-hover: #066761;
-  --color-primary-light: #EAF8F5;
-  --color-primary-surface: #F2F9F7;
+  /* — User-Specified Healthcare Design System Tokens — */
+  --color-primary: #07877F;
+  --color-primary-hover: #066E68;
+  --color-primary-light: #EAF4F0;
+  --color-primary-surface: #EAF4F0;
+  --color-forest: #142923;
 
   /* — Palette Neutrals & Editorial Surfaces — */
   --color-ink: #182522;
-  --color-bg: #FAF9F5;
+  --color-text-secondary: #5F6D68;
+  --color-bg: #FAF9F6;
   --color-surface: #FFFFFF;
-  --color-sage: #E9F1EB;
-  --color-slate: #66736F;
-  --color-border: #E5E5DF;
-  --color-border-subtle: #ECECE6;
+  --color-card: #FFFFFF;
+  --color-accent-subtle: #EAF4F0;
+  --color-divider: #E5E9E5;
+
+  /* — Form Input Tokens — */
+  --input-bg: #FFFFFF;
+  --input-border: #C8D2CE;
+  --input-border-hover: #849B93;
+  --input-border-focus: #07877F;
+  --input-text: #182522;
+  --input-placeholder: #5F6D68;
 
   /* — Semantic & Feedback — */
-  --color-success: #15803D;
-  --color-success-light: #F0FDF4;
+  --color-success: #087443;
+  --color-success-light: #EDF7F2;
   --color-warning: #B45309;
   --color-warning-light: #FFFBEB;
-  --color-error: #B91C1C;
-  --color-error-light: #FEF2F2;
+  --color-error: #B42318;
+  --color-error-light: #FDF2F2;
 
   /* — Shadows (Understated, non-generic) — */
   --shadow-xs: 0 1px 2px rgba(24, 37, 34, 0.04);
@@ -35,15 +44,15 @@
   --shadow-md: 0 4px 12px -2px rgba(24, 37, 34, 0.06), 0 2px 4px -2px rgba(24, 37, 34, 0.03);
   --shadow-lg: 0 12px 28px -6px rgba(24, 37, 34, 0.08), 0 4px 8px -4px rgba(24, 37, 34, 0.03);
   --shadow-xl: 0 20px 40px -10px rgba(24, 37, 34, 0.09);
-  --shadow-primary: 0 2px 8px rgba(8, 127, 120, 0.2);
+  --shadow-primary: 0 2px 8px rgba(7, 135, 127, 0.2);
 
   /* — Radius (Structured, intentional) — */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --radius-2xl: 22px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
   --radius-full: 9999px;
 
   /* — Animation — */
@@ -60,16 +69,16 @@
   --bottom-nav-height: 64px;
 
   /* Legacy & utility compat */
-  --background: #FAF9F5;
+  --background: #FAF9F6;
   --foreground: #182522;
   --card: #FFFFFF;
   --card-foreground: #182522;
-  --border: #E5E5DF;
-  --primary: #087F78;
-  --primary-hover: #066761;
+  --border: #C8D2CE;
+  --primary: #07877F;
+  --primary-hover: #066E68;
   --primary-foreground: #FFFFFF;
-  --muted: #E9F1EB;
-  --muted-foreground: #66736F;
+  --muted: #EAF4F0;
+  --muted-foreground: #5F6D68;
 }
 
 /* ============================================================
@@ -96,6 +105,81 @@ body {
 ::selection {
   background: #CCFBF1;
   color: #134E4A;
+}
+
+/* ============================================================
+   STANDARDIZED FORM INPUT SYSTEM
+   ============================================================ */
+.cf-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #C8D2CE;
+  border-radius: 11px;
+  font-size: 0.9375rem;
+  color: #182522;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+@media (max-width: 640px) {
+  .cf-input {
+    height: 50px;
+    font-size: 1rem; /* Prevents auto-zoom on iOS */
+  }
+}
+.cf-input::placeholder {
+  color: #5F6D68;
+  opacity: 0.65;
+}
+.cf-input:hover:not(:disabled):not(:focus) {
+  border-color: #849B93;
+}
+.cf-input:focus {
+  outline: none;
+  border-color: #07877F;
+  box-shadow: 0 0 0 3px rgba(7, 135, 127, 0.15);
+  background-color: #FFFFFF;
+}
+.cf-input:disabled {
+  background-color: #FAF9F6;
+  border-color: #E5E9E5;
+  color: #5F6D68;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+.cf-input-error {
+  border-color: #B42318 !important;
+}
+.cf-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.15) !important;
+}
+
+.cf-label {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #182522;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.cf-helper {
+  font-size: 0.75rem;
+  color: #5F6D68;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.cf-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #B42318;
+  margin-top: 5px;
 }
 
 /* ============================================================

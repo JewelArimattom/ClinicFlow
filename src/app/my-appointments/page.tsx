@@ -14,12 +14,13 @@ import {
   Phone, 
   Loader2, 
   CheckCircle2, 
-  XCircle,
-  AlertCircle,
-  FileText,
-  Sparkles,
-  Ticket
+  XCircle, 
+  AlertCircle, 
+  FileText, 
+  Sparkles, 
+  Ticket 
 } from "lucide-react";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 
 export default function MyAppointmentsPage() {
   const [searchType, setSearchType] = useState<"phone" | "reference">("phone");
@@ -77,225 +78,230 @@ export default function MyAppointmentsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#182522]">
+        <PublicNavbar />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header Section */}
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#E9F1EB] border border-[#E5E5DF] text-[#087F78] text-[11px] font-bold tracking-wider uppercase">
-            <Ticket className="w-3.5 h-3.5 text-[#087F78]" />
-            Patient Self-Service Portal
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#182522] tracking-tight">
-            Manage Your Appointments
-          </h1>
-          <p className="text-sm text-[#66736F] leading-relaxed max-w-lg mx-auto">
-            Check your consultation slip, track live queue status, or manage your appointment details in one click.
-          </p>
-        </div>
-
-        {/* Lookup Card */}
-        <div className="bg-white rounded-xl border border-[#E5E5DF] p-6 sm:p-8 shadow-[0_1px_3px_rgba(24,37,34,0.03)] mb-10 transition-colors">
-          {/* Segmented Switch */}
-          <div className="flex bg-[#E9F1EB] p-1 rounded-lg max-w-md mx-auto mb-6">
-            <button
-              type="button"
-              onClick={() => { setSearchType("phone"); setSearchValue(""); }}
-              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
-                searchType === "phone"
-                  ? "bg-white text-[#182522] shadow-sm"
-                  : "text-[#66736F] hover:text-[#182522]"
-              }`}
-            >
-              <Phone className="w-3.5 h-3.5 text-[#087F78]" />
-              Search by Phone
-            </button>
-            <button
-              type="button"
-              onClick={() => { setSearchType("reference"); setSearchValue(""); }}
-              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
-                searchType === "reference"
-                  ? "bg-white text-[#182522] shadow-sm"
-                  : "text-[#66736F] hover:text-[#182522]"
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5 text-[#087F78]" />
-              Booking Reference
-            </button>
+        <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          {/* Header Section */}
+          <div data-animate="fade-down" className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF4F0] border border-[#C8D2CE] text-[#07877F] text-xs font-bold tracking-wider uppercase">
+              <Ticket className="w-3.5 h-3.5 text-[#07877F]" />
+              Patient Self-Service Portal
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#182522] tracking-tight">
+              Manage Your Appointments
+            </h1>
+            <p className="text-sm text-[#5F6D68] leading-relaxed max-w-lg mx-auto">
+              Check your consultation slip, track live queue token status, or view appointment details in one place.
+            </p>
           </div>
 
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2.5">
-            <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#66736F]">
-                {searchType === "phone" ? <Phone className="w-4 h-4 text-[#087F78]" /> : <Search className="w-4 h-4 text-[#087F78]" />}
-              </div>
-              <input
-                type={searchType === "phone" ? "tel" : "text"}
-                required
-                placeholder={
+          {/* Lookup Card */}
+          <div
+            data-animate="fade-up"
+            className="bg-white rounded-2xl border border-[#C8D2CE] p-6 sm:p-8 shadow-sm mb-10 transition-colors"
+          >
+            {/* Segmented Switch */}
+            <div className="flex bg-[#EAF4F0] p-1 rounded-xl max-w-md mx-auto mb-6 border border-[#C8D2CE]/50">
+              <button
+                type="button"
+                onClick={() => { setSearchType("phone"); setSearchValue(""); }}
+                className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
                   searchType === "phone"
-                    ? "Enter 10-digit mobile number (e.g. 9847055112)"
-                    : "Enter booking reference code (e.g. APT-9F42A1)"
-                }
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 text-sm rounded-lg border border-[#E5E5DF] bg-[#FAF9F5] text-[#182522] placeholder:text-[#66736F]/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087F78]/20 focus:border-[#087F78] transition-colors"
-              />
+                    ? "bg-white text-[#182522] shadow-sm"
+                    : "text-[#5F6D68] hover:text-[#182522]"
+                }`}
+              >
+                <Phone className="w-3.5 h-3.5 text-[#07877F]" />
+                Search by Phone
+              </button>
+              <button
+                type="button"
+                onClick={() => { setSearchType("reference"); setSearchValue(""); }}
+                className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                  searchType === "reference"
+                    ? "bg-white text-[#182522] shadow-sm"
+                    : "text-[#5F6D68] hover:text-[#182522]"
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5 text-[#07877F]" />
+                Booking Reference
+              </button>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading || !searchValue.trim()}
-              className="py-2.5 px-6 rounded-lg bg-[#087F78] hover:bg-[#066761] disabled:opacity-50 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Looking up...</span>
-                </>
-              ) : (
-                <>
-                  <span>Find Booking</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Quick Demo Fill Pills */}
-          <div className="mt-4 pt-4 border-t border-[#E5E5DF]/70 flex flex-wrap items-center gap-2 text-xs text-[#66736F]">
-            <span className="font-medium text-[#182522]">Quick Test Reference:</span>
-            <button
-              type="button"
-              onClick={() => handleQuickDemo("APT-9F42A1")}
-              className="px-2.5 py-1 rounded bg-[#FAF9F5] hover:bg-[#E9F1EB] hover:text-[#087F78] text-[#182522] font-mono text-[11px] font-semibold border border-[#E5E5DF] transition-colors"
-            >
-              APT-9F42A1
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickDemo("APT-8B11C3")}
-              className="px-2.5 py-1 rounded bg-[#FAF9F5] hover:bg-[#E9F1EB] hover:text-[#087F78] text-[#182522] font-mono text-[11px] font-semibold border border-[#E5E5DF] transition-colors"
-            >
-              APT-8B11C3
-            </button>
-          </div>
-        </div>
-
-        {/* Error Alert */}
-        {error && (
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200/80 text-rose-700 text-xs flex items-center gap-2.5 mb-8 animate-fadeIn">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span className="font-medium">{error}</span>
-          </div>
-        )}
-
-        {/* Results Section */}
-        {searched && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-slate-900">
-                Found Bookings ({results.length})
-              </h2>
-              {results.length > 0 && (
-                <span className="text-xs text-slate-500 font-medium">
-                  Click slip to view full details
-                </span>
-              )}
-            </div>
-
-            {results.length === 0 && !isLoading && (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
-                  <Search className="w-6 h-6" />
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+              <div className="flex-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5F6D68]">
+                  {searchType === "phone" ? <Phone className="w-4 h-4 text-[#07877F]" /> : <Search className="w-4 h-4 text-[#07877F]" />}
                 </div>
-                <h3 className="text-base font-bold text-slate-900">No appointments found</h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  We couldn't find any appointment associated with this query. Please check your reference or contact your clinic.
-                </p>
-                <div className="pt-2">
-                  <Link
-                    href="/search"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 transition"
-                  >
-                    <span>Browse Clinics & Book Now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+                <input
+                  type={searchType === "phone" ? "tel" : "text"}
+                  required
+                  placeholder={
+                    searchType === "phone"
+                      ? "Enter 10-digit mobile number (e.g. 9847055112)"
+                      : "Enter booking reference code (e.g. APT-9F42A1)"
+                  }
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  className="w-full h-12 pl-11 pr-4 text-sm rounded-[11px] border border-[#C8D2CE] bg-white text-[#182522] placeholder:text-[#5F6D68]/60 hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-3 focus:ring-[#07877F]/15 transition-colors"
+                />
               </div>
-            )}
 
-            {results.map((booking) => {
-              const isCancelled = booking.status === "CANCELLED";
-              const isCompleted = booking.status === "COMPLETED";
+              <button
+                type="submit"
+                disabled={isLoading || !searchValue.trim()}
+                className="h-12 px-7 rounded-[11px] bg-[#07877F] hover:bg-[#066E68] disabled:opacity-50 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Looking up...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Find Booking</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.2]" />
+                  </>
+                )}
+              </button>
+            </form>
 
-              return (
-                <div
-                  key={booking.id}
-                  className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
-                >
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-900 text-white shadow-sm">
-                        {booking.reference}
-                      </span>
-                      <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${
-                        isCompleted
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                          : isCancelled
-                          ? "bg-rose-50 text-rose-700 border-rose-200"
-                          : "bg-teal-50 text-teal-700 border-teal-200"
-                      }`}>
-                        {booking.status}
-                      </span>
-                    </div>
+            {/* Quick Demo Fill Pills */}
+            <div className="mt-5 pt-4 border-t border-[#E5E9E5] flex flex-wrap items-center gap-2 text-xs text-[#5F6D68]">
+              <span className="font-semibold text-[#182522]">Quick Test Reference:</span>
+              <button
+                type="button"
+                onClick={() => handleQuickDemo("APT-9F42A1")}
+                className="px-2.5 py-1 rounded-md bg-[#FAF9F6] hover:bg-[#EAF4F0] hover:text-[#07877F] text-[#182522] font-mono text-[11px] font-semibold border border-[#C8D2CE] transition-colors"
+              >
+                APT-9F42A1
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickDemo("APT-8B11C3")}
+                className="px-2.5 py-1 rounded-md bg-[#FAF9F6] hover:bg-[#EAF4F0] hover:text-[#07877F] text-[#182522] font-mono text-[11px] font-semibold border border-[#C8D2CE] transition-colors"
+              >
+                APT-8B11C3
+              </button>
+            </div>
+          </div>
 
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-teal-700 transition-colors">
-                        {booking.clinic?.name}
-                      </h3>
-                      <p className="text-xs text-slate-500">
-                        {booking.clinic?.address}, {booking.clinic?.city}
-                      </p>
-                    </div>
+          {/* Error Alert */}
+          {error && (
+            <div className="p-4 rounded-xl bg-[#FDF2F2] border border-[#B42318]/30 text-[#B42318] text-xs font-semibold flex items-center gap-2.5 mb-8 animate-fadeIn">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
 
-                    <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-slate-600 pt-1 border-t border-slate-100">
-                      <div className="flex items-center gap-2 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-teal-600" />
-                        <span>{booking.date}</span>
-                      </div>
-                      <div className="flex items-center gap-2 font-medium">
-                        <Clock className="w-3.5 h-3.5 text-teal-600" />
-                        <span>{booking.startTime} - {booking.endTime}</span>
-                      </div>
-                      <div className="flex items-center gap-2 font-medium">
-                        <Stethoscope className="w-3.5 h-3.5 text-teal-600" />
-                        <span>{booking.doctor?.name} ({booking.doctor?.specialtyName})</span>
-                      </div>
-                    </div>
+          {/* Results Section */}
+          {searched && (
+            <div data-animate="fade-up" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-base font-bold text-[#182522]">
+                  Found Bookings ({results.length})
+                </h2>
+                {results.length > 0 && (
+                  <span className="text-xs text-[#5F6D68] font-medium">
+                    Click pass to view complete consultation card
+                  </span>
+                )}
+              </div>
+
+              {results.length === 0 && !isLoading && (
+                <div className="bg-white rounded-2xl border border-[#C8D2CE] p-12 text-center space-y-3">
+                  <div className="w-12 h-12 rounded-xl bg-[#EAF4F0] text-[#07877F] flex items-center justify-center mx-auto">
+                    <Search className="w-6 h-6" />
                   </div>
-
-                  <div className="flex md:flex-col items-center md:items-end justify-between gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
-                    <span className="text-lg font-extrabold text-slate-900">
-                      ₹{booking.consultationFee}
-                    </span>
+                  <h3 className="text-base font-bold text-[#182522]">No appointments found</h3>
+                  <p className="text-xs text-[#5F6D68] max-w-sm mx-auto leading-relaxed">
+                    We couldn't find any appointment associated with this query. Please check your reference code or mobile number.
+                  </p>
+                  <div className="pt-2">
                     <Link
-                      href={`/booking/confirmation/${booking.reference}`}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-sm shadow-teal-600/20 transition group-hover:shadow-md"
+                      href="/search"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-[11px] bg-[#07877F] text-white text-xs font-bold hover:bg-[#066E68] transition-colors"
                     >
-                      <span>View Pass</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      <span>Browse Clinics & Book Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </main>
+              )}
 
-      <PublicFooter />
-    </div>
+              {results.map((booking) => {
+                const isCancelled = booking.status === "CANCELLED";
+                const isCompleted = booking.status === "COMPLETED";
+
+                return (
+                  <div
+                    key={booking.id}
+                    className="bg-white rounded-2xl border border-[#C8D2CE] p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:border-[#07877F]"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#142923] text-white shadow-sm">
+                          {booking.reference}
+                        </span>
+                        <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${
+                          isCompleted
+                            ? "bg-[#EDF7F2] text-[#087443] border-[#087443]/30"
+                            : isCancelled
+                            ? "bg-[#FDF2F2] text-[#B42318] border-[#B42318]/30"
+                            : "bg-[#EAF4F0] text-[#07877F] border-[#07877F]/30"
+                        }`}>
+                          {booking.status}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-bold text-[#182522] group-hover:text-[#07877F] transition-colors">
+                          {booking.clinic?.name}
+                        </h3>
+                        <p className="text-xs text-[#5F6D68]">
+                          {booking.clinic?.address}, {booking.clinic?.city}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-[#5F6D68] pt-1 border-t border-[#E5E9E5]">
+                        <div className="flex items-center gap-2 font-medium">
+                          <Calendar className="w-3.5 h-3.5 text-[#07877F]" />
+                          <span>{booking.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2 font-medium">
+                          <Clock className="w-3.5 h-3.5 text-[#07877F]" />
+                          <span>{booking.startTime} - {booking.endTime}</span>
+                        </div>
+                        <div className="flex items-center gap-2 font-medium">
+                          <Stethoscope className="w-3.5 h-3.5 text-[#07877F]" />
+                          <span>{booking.doctor?.name} ({booking.doctor?.specialtyName})</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex md:flex-col items-center md:items-end justify-between gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-[#E5E9E5]">
+                      <span className="text-lg font-extrabold text-[#182522]">
+                        ₹{booking.consultationFee}
+                      </span>
+                      <Link
+                        href={`/booking/confirmation/${booking.reference}`}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[11px] bg-[#07877F] hover:bg-[#066E68] text-white text-xs font-bold shadow-sm shadow-[#07877F]/20 transition-all group-hover:shadow-md"
+                      >
+                        <span>View Pass</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </main>
+
+        <PublicFooter />
+      </div>
+    </AnimatedPage>
   );
 }

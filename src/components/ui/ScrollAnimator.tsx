@@ -79,33 +79,28 @@ export function ScrollAnimator({ children }: { children: ReactNode }) {
  * and are within <section> or <main> tags.
  */
 function autoTagElements() {
-  // Target these selectors within sections
+  // Target these selectors within sections and main containers
   const selectors = [
-    "section",
-    "section h1",
-    "section h2",
-    "section h3",
-    "section p",
-    "section img",
+    "section h1, main h1",
+    "section h2, main h2",
+    "section h3, main h3",
+    "section > p, main > p, section .lead-text, main .lead-text",
+    "section img:not([data-animate])",
     "section article",
     "section .grid > *",
-    "section form",
-    "section a.py-3", // CTA buttons
+    "section form, main form",
     "footer > div",
   ];
 
   selectors.forEach((selector) => {
     document.querySelectorAll(selector).forEach((el) => {
-      // Skip if element or any ancestor already has data-animate
+      // Skip if element itself already has data-animate
       if (el.hasAttribute("data-animate")) return;
+      // Skip if an ancestor already handles the animation (prevents double translations)
+      if (el.parentElement?.closest("[data-animate]")) return;
 
       const htmlEl = el as HTMLElement;
       const tag = el.tagName.toLowerCase();
-
-      if (tag === "section") {
-        // Don't animate sections themselves — animate their direct children
-        return;
-      }
 
       if (tag === "h1" || tag === "h2") {
         htmlEl.setAttribute("data-animate", "fade-up");
@@ -113,32 +108,28 @@ function autoTagElements() {
         htmlEl.setAttribute("data-animate", "fade-up");
       } else if (tag === "p") {
         htmlEl.setAttribute("data-animate", "fade-up");
-        htmlEl.setAttribute("data-animate-delay", "80");
+        htmlEl.setAttribute("data-animate-delay", "60");
       } else if (tag === "img") {
         htmlEl.setAttribute("data-animate", "fade-in");
-        htmlEl.setAttribute("data-animate-delay", "120");
+        htmlEl.setAttribute("data-animate-delay", "100");
       } else if (tag === "article") {
         htmlEl.setAttribute("data-animate", "fade-up");
       } else if (tag === "form") {
         htmlEl.setAttribute("data-animate", "fade-up");
-        htmlEl.setAttribute("data-animate-delay", "150");
-      } else if (tag === "a") {
-        htmlEl.setAttribute("data-animate", "fade-up");
-        htmlEl.setAttribute("data-animate-delay", "200");
+        htmlEl.setAttribute("data-animate-delay", "100");
       } else if (tag === "div") {
-        // Grid children and footer
         htmlEl.setAttribute("data-animate", "fade-up");
       }
     });
   });
 
   // Add stagger delays to grid children
-  document.querySelectorAll("section .grid").forEach((grid) => {
+  document.querySelectorAll("section .grid, main .grid").forEach((grid) => {
     const children = grid.children;
     for (let i = 0; i < children.length; i++) {
       const child = children[i] as HTMLElement;
-      if (child.hasAttribute("data-animate")) {
-        child.setAttribute("data-animate-delay", String(i * 80));
+      if (child.hasAttribute("data-animate") && !child.hasAttribute("data-animate-delay")) {
+        child.setAttribute("data-animate-delay", String(i * 70));
       }
     }
   });

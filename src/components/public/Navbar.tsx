@@ -65,18 +65,18 @@ export function PublicNavbar() {
       <header
         className={`sticky top-0 z-40 w-full transition-colors duration-200 ${
           scrolled
-            ? "bg-[#FAF9F5]/95 backdrop-blur-md border-b border-[#E5E5DF] shadow-[0_1px_3px_rgba(24,37,34,0.03)]"
-            : "bg-[#FAF9F5] border-b border-[#E5E5DF]"
+            ? "bg-[#FAF9F6]/95 backdrop-blur-md border-b border-[#E5E9E5] shadow-[0_1px_3px_rgba(24,37,34,0.03)]"
+            : "bg-[#FAF9F6] border-b border-[#E5E9E5]"
         }`}
       >
         <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center justify-between">
           {/* Brand Mark */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] focus-visible:ring-offset-2 rounded-md"
+            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] focus-visible:ring-offset-2 rounded-md"
             aria-label="ClinicFlow Home"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#087F78] flex items-center justify-center text-white transition-all group-hover:shadow-[0_2px_8px_rgba(8,127,120,0.35)]">
+            <div className="w-9 h-9 rounded-lg bg-[#07877F] flex items-center justify-center text-white transition-all group-hover:shadow-[0_2px_8px_rgba(7,135,127,0.35)]">
               <svg
                 width="20"
                 height="20"
@@ -97,13 +97,13 @@ export function PublicNavbar() {
               </svg>
             </div>
             <span className="text-[17px] tracking-[-0.015em] font-bold text-[#182522]">
-              Clinic<span className="font-semibold text-[#087F78]">Flow</span>
+              Clinic<span className="font-semibold text-[#07877F]">Flow</span>
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav
-            className="hidden lg:flex items-center gap-1 text-[13.5px] font-medium text-[#66736F]"
+            className="hidden lg:flex items-center gap-1 text-[13.5px] font-medium text-[#5F6D68]"
             aria-label="Primary navigation"
           >
             {navLinks.map((link) => {
@@ -112,10 +112,10 @@ export function PublicNavbar() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`px-3 py-1.5 rounded-md transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] ${
+                  className={`px-3 py-1.5 rounded-md transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] ${
                     isActive
-                      ? "text-[#182522] font-semibold bg-[#E9F1EB]"
-                      : "text-[#66736F] hover:text-[#182522] hover:bg-[#E9F1EB]/60"
+                      ? "text-[#182522] font-semibold bg-[#EAF4F0]"
+                      : "text-[#5F6D68] hover:text-[#182522] hover:bg-[#EAF4F0]/60"
                   }`}
                 >
                   {link.label}
@@ -128,14 +128,14 @@ export function PublicNavbar() {
           <div className="hidden lg:flex items-center gap-2.5">
             <Link
               href="/login"
-              className="text-[13px] font-medium text-[#182522] hover:text-[#087F78] px-3 py-1.5 rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+              className="text-[13px] font-medium text-[#182522] hover:text-[#07877F] px-3 py-1.5 rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F]"
             >
               Sign In
             </Link>
-            <span className="w-px h-4 bg-[#E5E5DF]" aria-hidden="true" />
+            <span className="w-px h-4 bg-[#E5E9E5]" aria-hidden="true" />
             <Link
               href="/register-clinic"
-              className="text-[13px] font-semibold text-[#182522] bg-white border border-[#E5E5DF] hover:border-[#182522] hover:bg-[#FAF9F5] px-3.5 py-1.5 rounded-md transition-all shadow-[0_1px_2px_rgba(24,37,34,0.04)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] active:translate-y-[0.5px]"
+              className="text-[13px] font-semibold text-[#182522] bg-white border border-[#C8D2CE] hover:border-[#07877F] hover:bg-[#EAF4F0] px-3.5 py-1.5 rounded-md transition-all shadow-[0_1px_2px_rgba(24,37,34,0.04)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] active:translate-y-[0.5px]"
             >
               Register Clinic
             </Link>
@@ -145,7 +145,7 @@ export function PublicNavbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="lg:hidden p-2 text-[#182522] hover:text-[#087F78] rounded-md hover:bg-[#E9F1EB]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+            className="lg:hidden p-2 text-[#182522] hover:text-[#07877F] rounded-md hover:bg-[#EAF4F0]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F]"
             aria-label="Open navigation menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -165,12 +165,12 @@ export function PublicNavbar() {
           />
 
           {/* Drawer Sheet */}
-          <div className="fixed inset-y-0 right-0 max-w-[320px] w-full bg-[#FAF9F5] border-l border-[#E5E5DF] shadow-xl flex flex-col justify-between p-6 z-10 animate-fade-in">
+          <div className="fixed inset-y-0 right-0 max-w-[320px] w-full bg-[#FAF9F6] border-l border-[#E5E9E5] shadow-xl flex flex-col justify-between p-6 z-10 animate-fade-in">
             <div className="space-y-6">
               {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#E5E5DF]">
+              <div className="flex items-center justify-between pb-4 border-b border-[#E5E9E5]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-[#087F78] flex items-center justify-center text-white">
+                  <div className="w-7 h-7 rounded-lg bg-[#07877F] flex items-center justify-center text-white">
                     <svg
                       width="15"
                       height="15"
@@ -189,13 +189,13 @@ export function PublicNavbar() {
                     </svg>
                   </div>
                   <span className="text-[16px] font-bold text-[#182522]">
-                    Clinic<span className="text-[#087F78]">Flow</span>
+                    Clinic<span className="text-[#07877F]">Flow</span>
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 text-[#66736F] hover:text-[#182522] rounded-md hover:bg-[#E9F1EB] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+                  className="p-1.5 text-[#5F6D68] hover:text-[#182522] rounded-md hover:bg-[#EAF4F0] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F]"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5" strokeWidth={1.75} />
@@ -205,6 +205,7 @@ export function PublicNavbar() {
               {/* Navigation Links */}
               <nav className="space-y-1" aria-label="Mobile menu navigation">
                 {navLinks.map((link) => {
+                  const Icon = link.icon;
                   const isActive = pathname === link.href;
                   return (
                     <Link
@@ -212,11 +213,11 @@ export function PublicNavbar() {
                       href={link.href}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
                         isActive
-                          ? "bg-[#E9F1EB] text-[#182522] font-semibold"
-                          : "text-[#66736F] hover:text-[#182522] hover:bg-[#E9F1EB]/50"
+                          ? "bg-[#EAF4F0] text-[#07877F] font-semibold"
+                          : "text-[#5F6D68] hover:text-[#182522] hover:bg-[#EAF4F0]/50"
                       }`}
                     >
-                      <link.icon className="w-4 h-4 text-[#66736F]" strokeWidth={1.75} />
+                      <link.icon className="w-4 h-4 text-[#5F6D68]" strokeWidth={1.75} />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -225,21 +226,21 @@ export function PublicNavbar() {
             </div>
 
             {/* Account Actions in Drawer */}
-            <div className="pt-6 border-t border-[#E5E5DF] space-y-2.5">
+            <div className="pt-6 border-t border-[#E5E9E5] space-y-2.5">
               <Link
                 href="/login"
-                className="w-full flex items-center justify-center py-2.5 px-4 rounded-md text-sm font-medium text-[#182522] bg-white border border-[#E5E5DF] hover:bg-[#FAF9F5] transition-colors text-center"
+                className="w-full flex items-center justify-center py-2.5 px-4 rounded-md text-sm font-medium text-[#182522] bg-white border border-[#C8D2CE] hover:bg-[#FAF9F6] transition-colors text-center"
               >
                 Sign In
               </Link>
               <Link
                 href="/register-clinic"
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-md text-sm font-semibold text-white bg-[#087F78] hover:bg-[#066761] transition-colors shadow-sm text-center"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-md text-sm font-semibold text-white bg-[#07877F] hover:bg-[#066E68] transition-colors shadow-sm text-center"
               >
                 <span>Register Clinic</span>
                 <ArrowRight className="w-4 h-4" strokeWidth={2} />
               </Link>
-              <p className="text-[11px] text-[#66736F] text-center pt-2">
+              <p className="text-[11px] text-[#5F6D68] text-center pt-2">
                 Healthcare practices across India
               </p>
             </div>

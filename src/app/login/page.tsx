@@ -1,20 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PublicNavbar } from "@/components/public/Navbar";
-import { PublicFooter } from "@/components/public/Footer";
 import {
-  HeartPulse,
-  LogIn,
+  Compass,
+  CalendarCheck,
   ShieldCheck,
   AlertCircle,
   Loader2,
   ArrowRight,
   User,
+  Mail,
   Lock,
 } from "lucide-react";
+import { FormInput } from "@/components/ui/FormInput";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,6 +27,11 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password.");
+      return;
+    }
+
     try {
       setIsLoading(true);
       setErrorMessage("");
@@ -35,7 +42,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Authentication failed");
+        throw new Error(data.error || "Authentication failed. Please verify your credentials.");
       }
       router.push(data.redirectUrl || "/app/dashboard");
       router.refresh();
@@ -49,152 +56,305 @@ export default function LoginPage() {
   const handleQuickDemoLogin = (demoEmail: string, demoPass: string) => {
     setEmail(demoEmail);
     setPassword(demoPass);
+    setErrorMessage("");
   };
 
   const demoAccounts = [
-    { email: "owner@aurahealth.in", pass: "Clinic@123", role: "Clinic Owner", desc: "Aura Health (Kochi)", primary: true },
-    { email: "admin@clinicflow.in", pass: "Admin@123", role: "Super-Admin", desc: "Platform Owner", primary: true },
-    { email: "reception@aurahealth.in", pass: "Clinic@123", role: "Receptionist", desc: "Token Queue", primary: false },
-    { email: "pharma@aurahealth.in", pass: "Clinic@123", role: "Pharmacist", desc: "Batches & POS", primary: false },
+    { email: "owner@aurahealth.in", pass: "Clinic@123", role: "Owner" },
+    { email: "admin@clinicflow.in", pass: "Admin@123", role: "Admin" },
+    { email: "reception@aurahealth.in", pass: "Clinic@123", role: "Desk" },
+    { email: "pharma@aurahealth.in", pass: "Clinic@123", role: "Pharma" },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
-      <PublicNavbar />
+    <AnimatedPage>
+      <div className="h-[100dvh] w-full flex flex-col lg:flex-row bg-[#FAF9F6] text-[#182522] overflow-hidden">
+        {/* Left Panel — ClinicFlow Brand Experience (Desktop only, 42% width) */}
+        <div
+          data-animate="fade-right"
+          className="hidden lg:flex lg:w-[42%] xl:w-[40%] bg-[#142923] text-white flex-col justify-between p-8 xl:p-10 relative overflow-hidden"
+        >
+          {/* Subtle background glow */}
+          <div
+            className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#07877F]/20 blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[#07877F]/15 blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-md w-full space-y-6">
-          {/* Header */}
-          <div className="text-center space-y-2.5">
-            <div className="w-10 h-10 rounded-md bg-[#087F78] text-white flex items-center justify-center mx-auto shadow-sm">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 2v20M2 12h20" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-[#182522] tracking-tight">
-              Sign in to ClinicFlow
-            </h1>
-            <p className="text-xs text-[#66736F]">
-              Access your clinic workspace or administrative console
-            </p>
-          </div>
-
-          {/* Demo credentials */}
-          <div className="bg-[#E9F1EB] p-4 rounded-xl border border-[#E5E5DF] space-y-2.5">
-            <p className="text-xs font-semibold text-[#182522] flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-[#087F78]" strokeWidth={2} />
-              Demo Quick-Fill Accounts:
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {demoAccounts.map((acc) => (
-                <button
-                  key={acc.email}
-                  type="button"
-                  onClick={() => handleQuickDemoLogin(acc.email, acc.pass)}
-                  className="p-2.5 rounded-lg border border-[#E5E5DF] bg-white hover:bg-[#FAF9F5] text-left text-[11px] font-medium transition-colors text-[#182522]"
+          {/* Top Brand Header */}
+          <div className="relative z-10">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] rounded-lg"
+              aria-label="ClinicFlow Home"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[#07877F] text-white flex items-center justify-center shadow-md shadow-[#07877F]/30 group-hover:bg-[#066E68] transition-colors">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
                 >
-                  <strong className="block text-[#182522] text-xs font-semibold">{acc.role}</strong>
-                  <span className="text-[#66736F]">{acc.desc}</span>
-                </button>
-              ))}
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  <path d="M12 5v6m-3-3h6" />
+                </svg>
+              </div>
+              <span className="font-extrabold text-lg tracking-tight text-white">
+                Clinic<span className="text-[#52B1A2]">Flow</span>
+              </span>
+            </Link>
+          </div>
+
+          {/* Compact Left Messaging */}
+          <div className="relative z-10 my-auto space-y-5">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#07877F]/20 text-[#52B1A2] text-[11px] font-semibold border border-[#07877F]/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#52B1A2] animate-pulse" />
+              Unified Healthcare Workspace
+            </div>
+
+            <h1 className="text-2xl xl:text-3xl font-extrabold text-white leading-tight tracking-tight">
+              Better care starts with better connections.
+            </h1>
+
+            <p className="text-xs xl:text-sm text-[#C8D2CE] leading-relaxed">
+              Discover trusted clinics, manage appointments, and streamline patient flow for Indian medical practices.
+            </p>
+
+            <div className="space-y-3 pt-1">
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg bg-[#07877F]/25 text-[#52B1A2] flex items-center justify-center flex-shrink-0 border border-[#07877F]/30">
+                  <Compass className="w-3.5 h-3.5" strokeWidth={2} />
+                </div>
+                <div className="text-xs">
+                  <strong className="text-white font-semibold block">Find nearby healthcare providers</strong>
+                  <span className="text-[#849B93]">Verified specialties and consultation fees.</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg bg-[#07877F]/25 text-[#52B1A2] flex items-center justify-center flex-shrink-0 border border-[#07877F]/30">
+                  <CalendarCheck className="w-3.5 h-3.5" strokeWidth={2} />
+                </div>
+                <div className="text-xs">
+                  <strong className="text-white font-semibold block">Live queue & token management</strong>
+                  <span className="text-[#849B93]">Real-time token calls and instant updates.</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg bg-[#07877F]/25 text-[#52B1A2] flex items-center justify-center flex-shrink-0 border border-[#07877F]/30">
+                  <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2} />
+                </div>
+                <div className="text-xs">
+                  <strong className="text-white font-semibold block">Digital billing & prescriptions</strong>
+                  <span className="text-[#849B93]">Encrypted HIPAA/ABDM-compatible records.</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Login form */}
-          <div className="bg-white p-6 sm:p-7 rounded-xl border border-[#E5E5DF] shadow-[0_1px_3px_rgba(24,37,34,0.03)]">
+          {/* Compact Left Footer */}
+          <div className="relative z-10 pt-4 border-t border-[#2B3C38] text-[11px] text-[#849B93] flex items-center justify-between">
+            <span>© 2026 ClinicFlow Inc.</span>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3 h-3 text-[#52B1A2]" />
+              <span>Encrypted Transit</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Panel — Compact, Non-Scrolling Login View */}
+        <div
+          data-animate="fade-left"
+          className="flex-1 flex flex-col justify-between p-5 sm:p-7 lg:p-10 xl:p-12 h-full overflow-hidden"
+        >
+          {/* Header Bar */}
+          <div className="flex items-center justify-between">
+            {/* Mobile logo on top */}
+            <div className="flex items-center gap-2 lg:hidden">
+              <Link href="/" className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#07877F] text-white flex items-center justify-center shadow-sm">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.25"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                    <path d="M12 5v6m-3-3h6" />
+                  </svg>
+                </div>
+                <span className="font-extrabold text-base tracking-tight text-[#182522]">
+                  Clinic<span className="text-[#07877F]">Flow</span>
+                </span>
+              </Link>
+            </div>
+
+            <Link
+              href="/"
+              className="hidden lg:inline-flex text-xs font-semibold text-[#5F6D68] hover:text-[#07877F] transition-colors items-center gap-1"
+            >
+              ← Back to Home
+            </Link>
+
+            <Link
+              href="/register-clinic"
+              className="text-xs font-bold text-[#07877F] hover:text-[#066E68] hover:underline transition-colors"
+            >
+              Register Clinic
+            </Link>
+          </div>
+
+          {/* Centered Compact Form (fits 100% inside viewport) */}
+          <div className="max-w-[400px] w-full mx-auto my-auto space-y-4 py-2">
+            {/* Title */}
+            <div className="space-y-1 text-center sm:text-left">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#07877F] bg-[#EAF4F0] px-2 py-0.5 rounded inline-block">
+                Portal Sign In
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#182522] tracking-tight">
+                Welcome back
+              </h2>
+              <p className="text-xs text-[#5F6D68]">
+                Sign in to continue to your ClinicFlow workspace.
+              </p>
+            </div>
+
+            {/* Error Message */}
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
-                <span>{errorMessage}</span>
+              <div
+                role="alert"
+                className="p-2.5 rounded-lg bg-[#FDF2F2] border border-[#B42318]/30 text-[#B42318] text-xs font-medium flex items-center gap-2 animate-fadeIn"
+              >
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={2} />
+                <span className="truncate">{errorMessage}</span>
               </div>
             )}
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            {/* Compact Quick-Fill Row */}
+            <div className="bg-white p-2.5 rounded-xl border border-[#C8D2CE] space-y-1.5 shadow-xs">
+              <div className="flex items-center justify-between text-[11px] font-bold text-[#182522]">
+                <span className="flex items-center gap-1">
+                  <User className="w-3 h-3 text-[#07877F]" />
+                  Quick-Fill Demo:
+                </span>
+                <span className="text-[10px] text-[#5F6D68] font-normal">Click to fill</span>
+              </div>
+              <div className="grid grid-cols-4 gap-1.5">
+                {demoAccounts.map((acc) => (
+                  <button
+                    key={acc.email}
+                    type="button"
+                    onClick={() => handleQuickDemoLogin(acc.email, acc.pass)}
+                    className="py-1 px-1 rounded-md border border-[#C8D2CE] bg-[#FAF9F6] hover:bg-[#EAF4F0] hover:border-[#07877F] text-center text-[10px] font-bold text-[#182522] transition-colors"
+                  >
+                    {acc.role}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Main Form */}
+            <form onSubmit={handleLogin} className="space-y-3">
               <div>
-                <label htmlFor="email" className="block text-xs font-semibold text-[#182522] mb-1.5">
+                <label htmlFor="email" className="block text-xs font-semibold text-[#182522] mb-1">
                   Email Address
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="w-4 h-4 text-[#66736F]" strokeWidth={1.75} />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5F6D68]">
+                    <Mail className="w-4 h-4" />
                   </div>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     required
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@clinic.in"
-                    className="w-full pl-9 pr-3.5 py-2.5 text-sm rounded-lg border border-[#E5E5DF] bg-[#FAF9F5] text-[#182522] placeholder:text-[#66736F]/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087F78]/20 focus:border-[#087F78] transition-colors"
+                    className="w-full h-11 pl-9 pr-3 text-sm bg-white border border-[#C8D2CE] hover:border-[#849B93] focus:border-[#07877F] focus:outline-none focus:ring-2 focus:ring-[#07877F]/15 rounded-xl transition-colors text-[#182522]"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-xs font-semibold text-[#182522] mb-1.5">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="w-4 h-4 text-[#66736F]" strokeWidth={1.75} />
-                  </div>
-                  <input
-                    id="password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full pl-9 pr-3.5 py-2.5 text-sm rounded-lg border border-[#E5E5DF] bg-[#FAF9F5] text-[#182522] placeholder:text-[#66736F]/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087F78]/20 focus:border-[#087F78] transition-colors"
-                  />
+                <div className="flex items-center justify-between mb-1">
+                  <label htmlFor="password" className="text-xs font-semibold text-[#182522]">
+
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      alert("Password reset instructions will be sent to your verified clinic email.")
+                    }
+                    className="text-[11px] font-semibold text-[#5F6D68] hover:text-[#07877F] transition-colors"
+                  >
+                    Forgot?
+                  </button>
                 </div>
+                <PasswordInput
+                  id="password"
+                  name="password"
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  className="h-11 text-sm"
+                />
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 px-4 rounded-lg bg-[#087F78] hover:bg-[#066761] disabled:opacity-50 text-white font-semibold text-sm transition-colors shadow-sm flex items-center justify-center gap-2 mt-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+                className="w-full h-11 rounded-xl bg-[#07877F] hover:bg-[#066E68] text-white font-bold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 mt-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#07877F] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Signing in...
+                    <span>Signing in...</span>
                   </>
                 ) : (
                   <>
-                    Sign In
-                    <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                    <span>Sign In</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="mt-6 pt-4 border-t border-[#E5E5DF]/70 text-center text-xs text-[#66736F]">
-              New clinic practice?{" "}
-              <Link href="/register-clinic" className="font-semibold text-[#087F78] hover:underline transition-colors">
-                Register Your Clinic
+            {/* Registration Callout */}
+            <div className="pt-2 text-center text-xs text-[#5F6D68]">
+              <span>Need a clinic workspace? </span>
+              <Link
+                href="/register-clinic"
+                className="font-bold text-[#07877F] hover:text-[#066E68] hover:underline transition-colors"
+              >
+                Register Clinic
               </Link>
             </div>
           </div>
 
-          <div className="text-center text-xs text-[#66736F] flex items-center justify-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#087F78]" strokeWidth={1.75} />
-            <span>Secure multi-tenant authentication · Encrypted in transit</span>
+          {/* Bottom security strip */}
+          <div className="text-center text-[11px] text-[#5F6D68] flex items-center justify-center gap-1.5 pt-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#07877F]" strokeWidth={1.8} />
+            <span>Encrypted HIPAA/ABDM-compatible session</span>
           </div>
         </div>
-      </main>
-
-      <PublicFooter />
-    </div>
+      </div>
+    </AnimatedPage>
   );
 }
