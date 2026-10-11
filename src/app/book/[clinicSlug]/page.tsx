@@ -150,12 +150,12 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
 
   if (isLoadingClinic) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
         <PublicNavbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-3">
-            <Loader2 className="w-8 h-8 text-brand-600 animate-spin mx-auto" />
-            <p className="text-sm font-medium text-gray-500">Loading booking schedule...</p>
+            <Loader2 className="w-8 h-8 text-[#087F78] animate-spin mx-auto" />
+            <p className="text-sm font-medium text-[#66736F]">Loading booking schedule...</p>
           </div>
         </div>
         <PublicFooter />
@@ -164,7 +164,7 @@ export default function BookingFlowPage({ params }: { params: { clinicSlug: stri
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
       <PublicNavbar />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">

@@ -6,70 +6,70 @@
    CLINICFLOW DESIGN TOKENS
    ============================================================ */
 :root {
-  /* — Brand Colors — */
-  --color-primary: #0D9488;
-  --color-primary-hover: #0F766E;
+  /* — Restrained Healthcare Identity Tokens — */
+  --color-primary: #087F78;
+  --color-primary-hover: #066761;
   --color-primary-light: #EAF8F5;
-  --color-primary-surface: #F0FDFA;
+  --color-primary-surface: #F2F9F7;
 
-  /* — Neutrals — */
-  --color-bg: #FFFFFF;
-  --color-bg-soft: #F7FAFA;
-  --color-bg-muted: #F1F5F9;
-  --color-text: #101828;
-  --color-text-body: #475467;
-  --color-text-muted: #667085;
-  --color-border: #E4E7EC;
-  --color-border-light: #F2F4F7;
+  /* — Palette Neutrals & Editorial Surfaces — */
+  --color-ink: #182522;
+  --color-bg: #FAF9F5;
+  --color-surface: #FFFFFF;
+  --color-sage: #E9F1EB;
+  --color-slate: #66736F;
+  --color-border: #E5E5DF;
+  --color-border-subtle: #ECECE6;
 
-  /* — Semantic — */
-  --color-success: #16865C;
-  --color-success-light: #ECFDF3;
-  --color-warning: #B7791F;
+  /* — Semantic & Feedback — */
+  --color-success: #15803D;
+  --color-success-light: #F0FDF4;
+  --color-warning: #B45309;
   --color-warning-light: #FFFBEB;
-  --color-error: #D92D20;
-  --color-error-light: #FEF3F2;
+  --color-error: #B91C1C;
+  --color-error-light: #FEF2F2;
 
-  /* — Shadows — */
-  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
-  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
-  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.06), 0 2px 4px -2px rgba(16, 24, 40, 0.04);
-  --shadow-lg: 0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 4px 8px -4px rgba(16, 24, 40, 0.03);
-  --shadow-xl: 0 20px 40px -8px rgba(16, 24, 40, 0.1), 0 8px 16px -4px rgba(16, 24, 40, 0.04);
-  --shadow-primary: 0 4px 14px -2px rgba(13, 148, 136, 0.25);
+  /* — Shadows (Understated, non-generic) — */
+  --shadow-xs: 0 1px 2px rgba(24, 37, 34, 0.04);
+  --shadow-sm: 0 1px 3px rgba(24, 37, 34, 0.05), 0 1px 2px rgba(24, 37, 34, 0.03);
+  --shadow-md: 0 4px 12px -2px rgba(24, 37, 34, 0.06), 0 2px 4px -2px rgba(24, 37, 34, 0.03);
+  --shadow-lg: 0 12px 28px -6px rgba(24, 37, 34, 0.08), 0 4px 8px -4px rgba(24, 37, 34, 0.03);
+  --shadow-xl: 0 20px 40px -10px rgba(24, 37, 34, 0.09);
+  --shadow-primary: 0 2px 8px rgba(8, 127, 120, 0.2);
 
-  /* — Radius — */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
+  /* — Radius (Structured, intentional) — */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
   --radius-full: 9999px;
 
   /* — Animation — */
   --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 400ms;
-  --duration-reveal: 600ms;
+  --duration-normal: 240ms;
+  --duration-slow: 360ms;
+  --duration-reveal: 450ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* — Layout — */
-  --container-max: 1280px;
-  --header-height: 64px;
+  --container-max: 1240px;
+  --header-height: 68px;
   --bottom-nav-height: 64px;
 
-  /* Legacy compat */
-  --background: #FFFFFF;
-  --foreground: #101828;
-  --card: #ffffff;
-  --card-foreground: #101828;
-  --border: #E4E7EC;
-  --primary: #0D9488;
-  --primary-hover: #0F766E;
-  --primary-foreground: #ffffff;
-  --muted: #f1f5f9;
-  --muted-foreground: #667085;
+  /* Legacy & utility compat */
+  --background: #FAF9F5;
+  --foreground: #182522;
+  --card: #FFFFFF;
+  --card-foreground: #182522;
+  --border: #E5E5DF;
+  --primary: #087F78;
+  --primary-hover: #066761;
+  --primary-foreground: #FFFFFF;
+  --muted: #E9F1EB;
+  --muted-foreground: #66736F;
 }
 
 /* ============================================================
@@ -117,7 +117,7 @@ body {
 }
 
 /* ============================================================
-   SCROLL-REVEAL ANIMATIONS
+   SCROLL-REVEAL ANIMATIONS (Legacy .reveal)
    ============================================================ */
 .reveal {
   opacity: 0;
@@ -130,7 +130,7 @@ body {
   transform: translateY(0);
 }
 
-/* Stagger children */
+/* Stagger children (legacy) */
 .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
 .reveal-stagger > .reveal:nth-child(2) { transition-delay: 60ms; }
 .reveal-stagger > .reveal:nth-child(3) { transition-delay: 120ms; }
@@ -139,6 +139,70 @@ body {
 .reveal-stagger > .reveal:nth-child(6) { transition-delay: 300ms; }
 .reveal-stagger > .reveal:nth-child(7) { transition-delay: 360ms; }
 .reveal-stagger > .reveal:nth-child(8) { transition-delay: 420ms; }
+
+/* ============================================================
+   SCROLL ANIMATOR (data-animate system)
+   Automatically applied by <ScrollAnimator> component
+   ============================================================ */
+
+/* — Shared base state — all data-animate variants start hidden */
+[data-animate] {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition-property: opacity, transform;
+  transition-duration: 600ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* — Direction-specific initial transforms — */
+[data-animate="fade-up"] {
+  transform: translateY(32px);
+}
+[data-animate="fade-down"] {
+  transform: translateY(-32px);
+}
+[data-animate="fade-left"] {
+  transform: translateX(40px);
+}
+[data-animate="fade-right"] {
+  transform: translateX(-40px);
+}
+[data-animate="fade-in"] {
+  transform: none;
+}
+[data-animate="scale-up"] {
+  transform: scale(0.92);
+}
+[data-animate="stagger-children"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* — Visible state — applied by IntersectionObserver */
+[data-animate].sa-visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* — Stagger delays via data attribute (handled in JS, CSS fallback) — */
+[data-animate][data-animate-delay] {
+  transition-delay: var(--sa-delay, 0ms);
+}
+
+/* Override for images inside cards — slightly faster */
+article [data-animate="fade-in"] {
+  transition-duration: 450ms;
+}
+
+/* Grid child stagger via nth-child (CSS-only fallback) */
+.sa-stagger > [data-animate]:nth-child(1) { transition-delay: 0ms; }
+.sa-stagger > [data-animate]:nth-child(2) { transition-delay: 80ms; }
+.sa-stagger > [data-animate]:nth-child(3) { transition-delay: 160ms; }
+.sa-stagger > [data-animate]:nth-child(4) { transition-delay: 240ms; }
+.sa-stagger > [data-animate]:nth-child(5) { transition-delay: 320ms; }
+.sa-stagger > [data-animate]:nth-child(6) { transition-delay: 400ms; }
+.sa-stagger > [data-animate]:nth-child(7) { transition-delay: 480ms; }
+.sa-stagger > [data-animate]:nth-child(8) { transition-delay: 560ms; }
 
 /* ============================================================
    BUTTON MICRO-INTERACTIONS
@@ -189,6 +253,11 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
   .btn-press:active {
     transform: none;

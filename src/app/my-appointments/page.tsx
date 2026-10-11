@@ -77,58 +77,58 @@ export default function MyAppointmentsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-teal-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
       <PublicNavbar />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200/80 text-teal-800 text-xs font-bold tracking-wide">
-            <Ticket className="w-3.5 h-3.5 text-teal-600" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#E9F1EB] border border-[#E5E5DF] text-[#087F78] text-[11px] font-bold tracking-wider uppercase">
+            <Ticket className="w-3.5 h-3.5 text-[#087F78]" />
             Patient Self-Service Portal
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#182522] tracking-tight">
             Manage Your Appointments
           </h1>
-          <p className="text-sm text-slate-600 leading-relaxed max-w-lg mx-auto">
+          <p className="text-sm text-[#66736F] leading-relaxed max-w-lg mx-auto">
             Check your consultation slip, track live queue status, or manage your appointment details in one click.
           </p>
         </div>
 
         {/* Lookup Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xl shadow-slate-900/5 mb-10 transition-all">
+        <div className="bg-white rounded-xl border border-[#E5E5DF] p-6 sm:p-8 shadow-[0_1px_3px_rgba(24,37,34,0.03)] mb-10 transition-colors">
           {/* Segmented Switch */}
-          <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md mx-auto mb-6">
+          <div className="flex bg-[#E9F1EB] p-1 rounded-lg max-w-md mx-auto mb-6">
             <button
               type="button"
               onClick={() => { setSearchType("phone"); setSearchValue(""); }}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
                 searchType === "phone"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-white text-[#182522] shadow-sm"
+                  : "text-[#66736F] hover:text-[#182522]"
               }`}
             >
-              <Phone className="w-3.5 h-3.5 text-teal-600" />
+              <Phone className="w-3.5 h-3.5 text-[#087F78]" />
               Search by Phone
             </button>
             <button
               type="button"
               onClick={() => { setSearchType("reference"); setSearchValue(""); }}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
                 searchType === "reference"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-white text-[#182522] shadow-sm"
+                  : "text-[#66736F] hover:text-[#182522]"
               }`}
             >
-              <FileText className="w-3.5 h-3.5 text-teal-600" />
+              <FileText className="w-3.5 h-3.5 text-[#087F78]" />
               Booking Reference
             </button>
           </div>
 
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2.5">
             <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                {searchType === "phone" ? <Phone className="w-4 h-4 text-teal-600" /> : <Search className="w-4 h-4 text-teal-600" />}
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#66736F]">
+                {searchType === "phone" ? <Phone className="w-4 h-4 text-[#087F78]" /> : <Search className="w-4 h-4 text-[#087F78]" />}
               </div>
               <input
                 type={searchType === "phone" ? "tel" : "text"}
@@ -140,14 +140,14 @@ export default function MyAppointmentsPage() {
                 }
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 text-sm rounded-2xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 transition-all placeholder:text-slate-400 font-medium"
+                className="w-full pl-10 pr-3 py-2.5 text-sm rounded-lg border border-[#E5E5DF] bg-[#FAF9F5] text-[#182522] placeholder:text-[#66736F]/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087F78]/20 focus:border-[#087F78] transition-colors"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading || !searchValue.trim()}
-              className="py-3.5 px-7 rounded-2xl bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:shadow-teal-600/20 active:scale-[0.99]"
+              className="py-2.5 px-6 rounded-lg bg-[#087F78] hover:bg-[#066761] disabled:opacity-50 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
             >
               {isLoading ? (
                 <>
@@ -164,19 +164,19 @@ export default function MyAppointmentsPage() {
           </form>
 
           {/* Quick Demo Fill Pills */}
-          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-            <span className="font-semibold text-slate-400">Quick Test Reference:</span>
+          <div className="mt-4 pt-4 border-t border-[#E5E5DF]/70 flex flex-wrap items-center gap-2 text-xs text-[#66736F]">
+            <span className="font-medium text-[#182522]">Quick Test Reference:</span>
             <button
               type="button"
               onClick={() => handleQuickDemo("APT-9F42A1")}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 font-mono text-[11px] font-semibold border border-slate-200 transition"
+              className="px-2.5 py-1 rounded bg-[#FAF9F5] hover:bg-[#E9F1EB] hover:text-[#087F78] text-[#182522] font-mono text-[11px] font-semibold border border-[#E5E5DF] transition-colors"
             >
               APT-9F42A1
             </button>
             <button
               type="button"
               onClick={() => handleQuickDemo("APT-8B11C3")}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 font-mono text-[11px] font-semibold border border-slate-200 transition"
+              className="px-2.5 py-1 rounded bg-[#FAF9F5] hover:bg-[#E9F1EB] hover:text-[#087F78] text-[#182522] font-mono text-[11px] font-semibold border border-[#E5E5DF] transition-colors"
             >
               APT-8B11C3
             </button>

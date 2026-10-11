@@ -37,7 +37,7 @@ export default async function PublicClinicProfilePage({ params }: { params: { sl
   const doctors = await db.getDoctors(clinic.id);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
       <PublicNavbar />
 
       {/* Cover image + clinic header */}

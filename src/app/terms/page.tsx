@@ -1,21 +1,23 @@
 import { PublicNavbar } from "@/components/public/Navbar";
 import { PublicFooter } from "@/components/public/Footer";
+import { AnimatedPage } from "@/components/ui/AnimatedPage";
 import { FileText, ShieldAlert, CheckCircle2 } from "lucide-react";
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <PublicNavbar />
+      <AnimatedPage>
       <main className="flex-1 max-w-[840px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div className="space-y-4 mb-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 border border-brand-200/60 text-xs font-semibold uppercase tracking-wider text-brand-700">
+          <div data-animate="fade-up" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 border border-brand-200/60 text-xs font-semibold uppercase tracking-wider text-brand-700">
             <FileText className="w-3.5 h-3.5" />
             Terms of Use
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
+          <h1 data-animate="fade-up" data-animate-delay="100" className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
             Terms of Service
           </h1>
-          <p className="text-sm text-gray-500">
+          <p data-animate="fade-up" data-animate-delay="200" className="text-sm text-gray-500">
             Effective as of October 2026 · Guidelines for patients and healthcare practices
           </p>
         </div>
@@ -49,6 +51,7 @@ export default function TermsPage() {
           </section>
         </div>
       </main>
+      </AnimatedPage>
       <PublicFooter />
     </div>
   );

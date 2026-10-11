@@ -6,13 +6,12 @@ import { usePathname } from "next/navigation";
 import {
   Search,
   CalendarDays,
-  LogIn,
-  PlusCircle,
+  Building2,
+  Stethoscope,
   Menu,
   X,
-  HeartPulse,
-  Building2,
-  ChevronRight,
+  CreditCard,
+  ArrowRight,
 } from "lucide-react";
 
 export function PublicNavbar() {
@@ -22,143 +21,231 @@ export function PublicNavbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 12);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile drawer on route change or ESC key
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { href: "/search", label: "Find Clinics", icon: Search },
-    { href: "/search", label: "Specialties", icon: HeartPulse, query: "?specialty=" },
+    { href: "/search", label: "Specialties", icon: Stethoscope },
     { href: "/my-appointments", label: "My Appointments", icon: CalendarDays },
     { href: "/for-clinics", label: "For Clinics", icon: Building2 },
-    { href: "/pricing", label: "Pricing" },
+    { href: "/pricing", label: "Pricing", icon: CreditCard },
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-40 w-full transition-all duration-normal ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-xl border-b border-gray-200/80 shadow-xs"
-          : "bg-white border-b border-transparent"
-      }`}
-    >
-      <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <Link
-          href="/"
-          className="flex items-center gap-2.5 group focus-ring rounded-lg"
-          aria-label="ClinicFlow Home"
-        >
-          <div className="w-9 h-9 rounded-[10px] bg-brand-600 flex items-center justify-center text-white shadow-sm group-hover:bg-brand-700 transition-colors duration-fast">
-            <HeartPulse className="w-[18px] h-[18px]" strokeWidth={2.25} />
-          </div>
-          <span className="text-[1.15rem] tracking-tight font-bold text-gray-900">
-            Clinic<span className="text-brand-600">Flow</span>
-          </span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1 text-[13px] font-medium text-gray-600" aria-label="Main navigation">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.label}
-                href={link.query ? link.href + link.query : link.href}
-                className={`px-3 py-2 rounded-lg transition-colors duration-fast focus-ring ${
-                  isActive
-                    ? "text-brand-700 bg-brand-50"
-                    : "hover:text-gray-900 hover:bg-gray-50"
-                }`}
+    <>
+      <header
+        className={`sticky top-0 z-40 w-full transition-colors duration-200 ${
+          scrolled
+            ? "bg-[#FAF9F5]/95 backdrop-blur-md border-b border-[#E5E5DF] shadow-[0_1px_3px_rgba(24,37,34,0.03)]"
+            : "bg-[#FAF9F5] border-b border-[#E5E5DF]"
+        }`}
+      >
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center justify-between">
+          {/* Brand Mark */}
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] focus-visible:ring-offset-2 rounded-md"
+            aria-label="ClinicFlow Home"
+          >
+            <div className="w-9 h-9 rounded-lg bg-[#087F78] flex items-center justify-center text-white transition-all group-hover:shadow-[0_2px_8px_rgba(8,127,120,0.35)]">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
               >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-2">
-          <Link
-            href="/login"
-            className="text-[13px] font-semibold text-gray-700 hover:text-gray-900 px-3.5 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-fast focus-ring flex items-center gap-1.5"
-          >
-            <LogIn className="w-4 h-4 text-gray-400" strokeWidth={1.75} />
-            Sign In
+                {/* Heart outline */}
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="rgba(255,255,255,0.2)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+                {/* Medical cross inside */}
+                <rect x="10.5" y="7" width="3" height="9" rx="0.75" fill="white" />
+                <rect x="8" y="9.5" width="8" height="3" rx="0.75" fill="white" />
+              </svg>
+            </div>
+            <span className="text-[17px] tracking-[-0.015em] font-bold text-[#182522]">
+              Clinic<span className="font-semibold text-[#087F78]">Flow</span>
+            </span>
           </Link>
-          <Link
-            href="/register-clinic"
-            className="text-[13px] font-semibold text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg shadow-sm transition-all duration-fast focus-ring flex items-center gap-1.5 btn-press"
+
+          {/* Desktop Navigation */}
+          <nav
+            className="hidden lg:flex items-center gap-1 text-[13.5px] font-medium text-[#66736F]"
+            aria-label="Primary navigation"
           >
-            <PlusCircle className="w-4 h-4" strokeWidth={1.75} />
-            Register Clinic
-          </Link>
-        </div>
-
-        {/* Mobile menu trigger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50 transition-colors focus-ring"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-        >
-          {mobileMenuOpen ? (
-            <X className="w-5 h-5" strokeWidth={1.75} />
-          ) : (
-            <Menu className="w-5 h-5" strokeWidth={1.75} />
-          )}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-gray-200 animate-fade-in">
-          <nav className="max-w-container mx-auto px-4 pb-4 pt-1 space-y-0.5" aria-label="Mobile navigation">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.label}
-                  href={link.query ? link.href + link.query : link.href}
-                  className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-md transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] ${
                     isActive
-                      ? "text-brand-700 bg-brand-50"
-                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                      ? "text-[#182522] font-semibold bg-[#E9F1EB]"
+                      : "text-[#66736F] hover:text-[#182522] hover:bg-[#E9F1EB]/60"
                   }`}
                 >
-                  <span className="flex items-center gap-2.5">
-                    {link.icon && <link.icon className="w-4 h-4 text-gray-400" strokeWidth={1.75} />}
-                    {link.label}
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-gray-300" strokeWidth={1.75} />
+                  {link.label}
                 </Link>
               );
             })}
+          </nav>
 
-            <div className="pt-3 mt-2 border-t border-gray-100 flex flex-col gap-2">
+          {/* Desktop Account Actions */}
+          <div className="hidden lg:flex items-center gap-2.5">
+            <Link
+              href="/login"
+              className="text-[13px] font-medium text-[#182522] hover:text-[#087F78] px-3 py-1.5 rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+            >
+              Sign In
+            </Link>
+            <span className="w-px h-4 bg-[#E5E5DF]" aria-hidden="true" />
+            <Link
+              href="/register-clinic"
+              className="text-[13px] font-semibold text-[#182522] bg-white border border-[#E5E5DF] hover:border-[#182522] hover:bg-[#FAF9F5] px-3.5 py-1.5 rounded-md transition-all shadow-[0_1px_2px_rgba(24,37,34,0.04)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78] active:translate-y-[0.5px]"
+            >
+              Register Clinic
+            </Link>
+          </div>
+
+          {/* Mobile Menu Trigger */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="lg:hidden p-2 text-[#182522] hover:text-[#087F78] rounded-md hover:bg-[#E9F1EB]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+            aria-label="Open navigation menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <Menu className="w-5 h-5" strokeWidth={1.75} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-[#182522]/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Drawer Sheet */}
+          <div className="fixed inset-y-0 right-0 max-w-[320px] w-full bg-[#FAF9F5] border-l border-[#E5E5DF] shadow-xl flex flex-col justify-between p-6 z-10 animate-fade-in">
+            <div className="space-y-6">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#E5E5DF]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-[#087F78] flex items-center justify-center text-white">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                        fill="rgba(255,255,255,0.2)"
+                        stroke="white"
+                        strokeWidth="1.5"
+                      />
+                      <rect x="10.5" y="7" width="3" height="9" rx="0.75" fill="white" />
+                      <rect x="8" y="9.5" width="8" height="3" rx="0.75" fill="white" />
+                    </svg>
+                  </div>
+                  <span className="text-[16px] font-bold text-[#182522]">
+                    Clinic<span className="text-[#087F78]">Flow</span>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 text-[#66736F] hover:text-[#182522] rounded-md hover:bg-[#E9F1EB] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087F78]"
+                  aria-label="Close menu"
+                >
+                  <X className="w-5 h-5" strokeWidth={1.75} />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="space-y-1" aria-label="Mobile menu navigation">
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                        isActive
+                          ? "bg-[#E9F1EB] text-[#182522] font-semibold"
+                          : "text-[#66736F] hover:text-[#182522] hover:bg-[#E9F1EB]/50"
+                      }`}
+                    >
+                      <link.icon className="w-4 h-4 text-[#66736F]" strokeWidth={1.75} />
+                      <span>{link.label}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Account Actions in Drawer */}
+            <div className="pt-6 border-t border-[#E5E5DF] space-y-2.5">
               <Link
                 href="/login"
-                className="text-center font-medium text-gray-700 py-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 text-sm transition-colors"
+                className="w-full flex items-center justify-center py-2.5 px-4 rounded-md text-sm font-medium text-[#182522] bg-white border border-[#E5E5DF] hover:bg-[#FAF9F5] transition-colors text-center"
               >
                 Sign In
               </Link>
               <Link
                 href="/register-clinic"
-                className="text-center font-semibold text-white bg-brand-600 hover:bg-brand-700 py-2.5 rounded-lg shadow-sm text-sm transition-colors btn-press"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-md text-sm font-semibold text-white bg-[#087F78] hover:bg-[#066761] transition-colors shadow-sm text-center"
               >
-                Register Your Clinic
+                <span>Register Clinic</span>
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
               </Link>
+              <p className="text-[11px] text-[#66736F] text-center pt-2">
+                Healthcare practices across India
+              </p>
             </div>
-          </nav>
+          </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

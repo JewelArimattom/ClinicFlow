@@ -11,50 +11,62 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        // Primary deep teal identity
         brand: {
-          50: "#F0FDFA",
-          100: "#CCFBF1",
-          200: "#99F6E4",
-          300: "#5EEAD4",
-          400: "#2DD4BF",
-          500: "#14B8A6",
-          600: "#0D9488",
-          700: "#0F766E",
-          800: "#115E59",
-          900: "#134E4A",
-          950: "#042F2E",
+          50: "#F2F9F7",
+          100: "#E2F2EE",
+          200: "#C4E5DE",
+          300: "#92CEC3",
+          400: "#52B1A2",
+          500: "#14958C",
+          600: "#087F78", // Requested primary deep teal
+          700: "#066761",
+          800: "#05524E",
+          900: "#044340",
+          950: "#022725",
         },
-        navy: {
-          50: "#F8FAFC",
-          100: "#F1F5F9",
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-          600: "#475569",
-          700: "#334155",
-          800: "#1E293B",
-          900: "#0F172A",
-          950: "#020617",
+        // Editorial neutrals
+        ink: {
+          DEFAULT: "#182522", // Requested deep ink dark text
+          light: "#2B3C38",
+          muted: "#66736F", // Requested muted slate
+        },
+        ivory: {
+          DEFAULT: "#FAF9F5", // Requested warm ivory background
+          soft: "#F5F3EC",
+          dark: "#EFECE3",
+        },
+        sage: {
+          DEFAULT: "#E9F1EB", // Requested pale sage secondary surface
+          light: "#F3F7F4",
+          dark: "#D6E5D9",
+        },
+        slate: {
+          muted: "#66736F", // Requested muted slate
         },
         surface: {
           DEFAULT: "#FFFFFF",
-          soft: "#F7FAFA",
-          muted: "#F1F5F9",
-          teal: "#EAF8F5",
+          soft: "#FAF9F5",
+          sage: "#E9F1EB",
+          card: "#FFFFFF",
+        },
+        border: {
+          DEFAULT: "#E5E5DF", // Requested subtle warm grey
+          subtle: "#ECECE6",
         },
         semantic: {
-          success: "#16865C",
-          "success-light": "#ECFDF3",
-          warning: "#B7791F",
+          success: "#15803D",
+          "success-light": "#F0FDF4",
+          warning: "#B45309",
           "warning-light": "#FFFBEB",
-          error: "#D92D20",
-          "error-light": "#FEF3F2",
+          error: "#B91C1C",
+          "error-light": "#FEF2F2",
         },
       },
       fontFamily: {
         sans: [
-          "var(--font-inter)",
+          "var(--font-sans)",
+          "Manrope",
           "Inter",
           "system-ui",
           "-apple-system",

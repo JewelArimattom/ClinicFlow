@@ -88,51 +88,49 @@ export default function RegisterClinicPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-teal-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#182522]">
       <PublicNavbar />
 
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-12">
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-900/5 overflow-hidden transition-all duration-300">
+        <div className="bg-white rounded-xl border border-[#E5E5DF] shadow-[0_1px_3px_rgba(24,37,34,0.03)] overflow-hidden transition-colors">
           
           {/* Header */}
-          <div className="p-8 sm:p-10 bg-slate-950 text-white relative overflow-hidden">
-            <div className="absolute right-0 top-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="relative z-10 space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 text-teal-400 text-xs font-bold border border-teal-500/30">
-                <Sparkles className="w-3.5 h-3.5" /> 14-Day Full Access Trial
+          <div className="p-7 sm:p-8 bg-[#182522] text-white border-b border-[#2C3D39]">
+            <div className="space-y-2.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#087F78]/20 text-[#52B1A2] text-[11px] font-semibold uppercase tracking-wider border border-[#087F78]/40">
+                <span>14-Day Free Trial</span>
               </div>
               
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 Register Your Clinic
               </h1>
-              <p className="text-xs text-slate-300 max-w-md leading-relaxed">
+              <p className="text-xs text-[#E9F1EB]/75 max-w-md leading-relaxed">
                 Set up your public booking profile, live queue engine, and billing ledger in under 3 minutes.
               </p>
 
               {/* Stepper Progress */}
-              <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-slate-800/80 text-xs font-semibold">
-                <div className={`flex items-center gap-2 ${step >= 1 ? "text-teal-400" : "text-slate-500"}`}>
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    step >= 1 ? "bg-teal-500 text-slate-950" : "bg-slate-800 text-slate-400"
+              <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-[#2C3D39] text-xs font-semibold">
+                <div className={`flex items-center gap-2 ${step >= 1 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
+                    step >= 1 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
                   }`}>
                     {step > 1 ? "✓" : "1"}
                   </span>
-                  <span>Owner Account</span>
+                  <span>Owner</span>
                 </div>
 
-                <div className={`flex items-center gap-2 ${step >= 2 ? "text-teal-400" : "text-slate-500"}`}>
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    step >= 2 ? "bg-teal-500 text-slate-950" : "bg-slate-800 text-slate-400"
+                <div className={`flex items-center gap-2 ${step >= 2 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
+                    step >= 2 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
                   }`}>
                     {step > 2 ? "✓" : "2"}
                   </span>
-                  <span>Clinic Profile</span>
+                  <span>Profile</span>
                 </div>
 
-                <div className={`flex items-center gap-2 ${step >= 3 ? "text-teal-400" : "text-slate-500"}`}>
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    step >= 3 ? "bg-teal-500 text-slate-950" : "bg-slate-800 text-slate-400"
+                <div className={`flex items-center gap-2 ${step >= 3 ? "text-[#52B1A2]" : "text-[#66736F]"}`}>
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
+                    step >= 3 ? "bg-[#087F78] text-white" : "bg-[#2C3D39] text-[#66736F]"
                   }`}>
                     3
                   </span>
